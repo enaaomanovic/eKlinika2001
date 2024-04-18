@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="bs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKlinika - Početna stranica</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Dodajte link ka vašem CSS fajlu -->
+    <link href="./login-home.component.css" rel="stylesheet">
+</head>
+
+<body>
+    <app-log-nav></app-log-nav>
+    <main>
+        <div class="container">
+            <h2>Evidencija prijema pacijenata</h2>
+            <div class="filter-form">
+                <label for="from-date">Od:</label>
+                <input type="date" id="from-date">
+                <label for="to-date">Do:</label>
+                <input type="date" id="to-date">
+                <button id="filter-btn">Filtriraj</button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ime i prezime pacijenta</th>
+                        <th>Datum i vrijeme prijema</th>
+                        <th>Ime i prezime nadležnog ljekara</th>
+                        <th>Hitni prijem</th>
+                        <th>Akcije</th>
+                        <th>Nalaz</th>
+
+
+                        <th>Izvjestaj</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Redovi tabele će biti dinamički generisani -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <app-footer></app-footer>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Dodajte link ka vašem JavaScript fajlu -->
+    <script src="./login-home.component.js"></script>
+</body>
+
+</html>

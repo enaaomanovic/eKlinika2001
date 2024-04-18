@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="bs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKlinika - Početna stranica</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Dodajte link ka vašem CSS fajlu -->
+    <link href="./home.component.css" rel="stylesheet">
+</head>
+
+<body>
+    <app-navbar></app-navbar>
+    <main>
+        <div class="col welcome-message">
+            <h1>Dobrodošli u <span style="color: #5c9ead;">eKliniku</span></h1>
+        </div>
+        <div class="row">
+            <div class="col about-us">
+                <h1>O nama</h1>
+                <p>Dobrodošli u našu <span style="font-size: 20px;">savremenu bolnicu</span>, gdje se posvećujemo pružanju vrhunske zdravstvene njege. Naša misija je osigurati najbolju moguću njegu našim pacijentima, a zadovoljstvo klijenata nam je apsolutni prioritet. U našem timu imamo stručne ljekare koji su posvećeni vašem zdravlju i dobrobiti. U našoj bolnici, vaše zdravlje je u sigurnim rukama. Hvala vam što ste odabrali našu bolnicu za vaše zdravstvene potrebe.</p>
+                <button mat-button color="primary" class="rounded login-button" (click)="openModal()">Login<span class="arrow"></span></button>
+                <div class="popup" *ngIf="prikazi">
+               
+                    <button class="close-btn" (click)="closeModal()">Zatvori</button>
+                    <input type="text" id="username" name="username" placeholder="Korisničko ime" autocomplete="username">
+                    <input type="password" id="password" name="password" placeholder="Lozinka" autocomplete="current-password">
+                    <button mat-button color="primary" class="rounded login-button" (click)="login()" [routerLink]="['login-home']" >Login</button>
+                </div>
+                
+                
+            </div>
+        </div>
+    </main>
+    <app-footer></app-footer>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

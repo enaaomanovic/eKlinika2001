@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "VRWWnZYHI9z6tUsC1dFGGk6GnyNyNzdJONfshxXGnBn6tvzGQAeBE6so3dpVK33O6W6EPt09/xG8XhZpfGM7qA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\HOME\\Desktop\\eKlinika2001\\eKlinika.Services\\eKlinika.Services.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\HOME\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
+    "C:\\Users\\HOME\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\HOME\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
+    "C:\\Users\\HOME\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
+    "C:\\Users\\HOME\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

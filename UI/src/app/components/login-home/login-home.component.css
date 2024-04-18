@@ -1,0 +1,142 @@
+/* styles.css */
+
+body {
+    /* background-image: url('../../../assets/hospital-homepage.jpg');
+     */
+     background-color:rgb(222, 245, 249);
+    /* Postavljanje pozadine */
+    background-size: cover;
+    /* Pokrivanje cijelog ekrana */
+    background-repeat: no-repeat;
+    /* Spriječavanje ponavljanja pozadine */
+    background-position: center center;
+    /* Poravnavanje slike na sredinu */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+
+header {
+    background-color: rgba(174, 227, 216, 0.8);
+    /* Prilagođena boja sa transparentnošću */
+    padding: 20px;
+    text-align: center;
+}
+
+h1,
+p {
+    color: #333;
+    /* Tamnosiva boja teksta */
+}
+
+main {
+    padding: 20px;
+    text-align: center;
+    color: black;
+    /* Bijela boja teksta za kontrast */
+}
+
+footer {
+    background-color: rgba(174, 227, 216, 0.8);
+    /* Prilagođena boja sa transparentnošću */
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Dodajemo stilove za animirani gumb */
+.call-to-action {
+    background-color: #5c9ead;
+    /* Plava boja */
+    color: #fff;
+    /* Bijela boja teksta */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    animation: pulse 2s infinite alternate;
+    /* Pulsiranje animacija */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+.rounded {
+    border-radius: 40px;
+    /* Postavljamo radijus zaobljenja */
+    background-color: #aee3d8;
+    /* Pastelno zelena boja */
+    transition: background-color 0.3s ease;
+    /* Dodana animacija za promjenu boje */
+    width: 150px;
+    /* Povećana širina dugmeta */
+}
+
+.rounded:hover {
+    background-color: #90c1b0;
+    /* Promjenjuje boju dugmeta na hover */
+}
+
+
+.container {
+    margin-top: 50px;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}
+
+.filter-form {
+    margin-bottom: 20px;
+}
+
+.filter-form label {
+    margin-right: 10px;
+}
+
+.filter-form input[type="date"],
+.filter-form button {
+    margin-right: 10px;
+}
+
+.filter-form button {
+ 
+    background-color: #007bff;
+    color: black;
+   
+    /* Plava boja */
+    color: black;
+    /* Bijela boja teksta */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-form button:hover {
+    background-color: #0056b3;
+}
+

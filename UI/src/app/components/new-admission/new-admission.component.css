@@ -1,0 +1,74 @@
+body {
+    background-color: rgb(222, 245, 249);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    z-index: 9999;
+    width: 80%;
+    max-width: 450px;
+    border: 2px solid #333;
+}
+
+.container input,
+.container select {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    width: calc(100% - 20px);
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.container button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: calc(40% - 40px);
+    font-size: 16px;
+
+    background-color: #007bff;
+    color: black;
+    
+  
+    transition: background-color 0.3s ease;
+}
+
+.container h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.container label {
+    font-size: 14px;
+    text-align: left;
+    margin-left: 5px;
+    display: block;
+}
+
+
+.form-group-hitni-prijem{
+    display: inline-flex;
+    
+
+    
+}
+
+
+
+
+.container p {
+    font-size: 14px;
+}

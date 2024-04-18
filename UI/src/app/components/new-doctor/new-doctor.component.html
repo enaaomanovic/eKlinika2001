@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="bs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKlinika - Početna stranica</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Dodajte link ka vašem CSS fajlu -->
+    <link href="./new-doctor.component.css" rel="stylesheet">
+</head>
+
+<body>
+    <app-log-nav></app-log-nav>
+    <main>
+        <div class="container">
+            <h2>Evidencija ljekara</h2>
+            <!-- Dodaj dugme za dodavanje pacijenta -->
+            <button class="btn btn-primary mb-2" id="dodajDoktora" (click)="openModal()">Dodaj ljekara</button>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ime ljekara</th>
+                        <th>Prezime ljekara</th>
+                        <th>Titula</th>
+                        <th>Sifra</th>
+                        
+                        <th>Uredi</th>
+                        <th>Obrisi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Redovi tabele će biti dinamički generisani -->
+                </tbody>
+            </table>
+            <div class="doctor-form" *ngIf="prikazi">
+                <h3>Popunite podatke o ljekaru</h3>
+                <form>
+                    <button class="close-btn" (click)="closeModal()">Zatvori</button>
+            
+                    <div class="form-group">
+                        <label for="imeLjekara">Ime ljekara:</label>
+                        <input type="text" id="imeLjekara" name="ime" required placeholder="Unesite ime ljekara">
+                    </div>
+                    <div class="form-group">
+                        <label for="prezimeLjekara">Prezime ljekara:</label>
+                        <input type="text" id="prezimeLjekara" name="prezime" required placeholder="Unesite prezime ljekara">
+                    </div>
+                  
+                    <div class="form-group">
+                        <label for="spol">Titula:</label>
+                        <select id="spol" name="spol" required>
+                            <option value="" disabled selected>Odaberite titulu</option>
+                            <option value="specijalista">Specijalista</option>
+                            <option value="specijalizant">Specijalizant</option>
+                            <option value="med. sestra">Med. sestra</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adresa">Sifra:</label>
+                        <input type="text" id="Sifra" name="Sifra" placeholder="Unesite sifru ljekara">
+                    </div>
+                  
+                    <button type="submit" class="form-group-btn">Potvrdi</button>
+                </form>
+            </div>
+            
+            
+        </div>
+    </main>
+    <app-footer></app-footer>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Dodajte link ka vašem JavaScript fajlu -->
+    <script src="./new-doctor.component.ts"></script>
+</body>
+
+</html>

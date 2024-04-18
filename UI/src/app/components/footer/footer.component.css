@@ -1,0 +1,35 @@
+body,html {
+    background-color: #5c9ead; /* Pastelna plava boja */
+    font-family: Arial, sans-serif;
+    margin: 0;
+  height: auto;
+
+}
+
+h1 {
+    color: #333; /* Tamnosiva boja teksta */
+}
+
+footer {
+    background-color: #aee3d8; /* Pastelna zelena boja */
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.contact-info p {
+    margin: 0 10px;
+}
+
+.contact-info i {
+    margin-right: 5px;
+}

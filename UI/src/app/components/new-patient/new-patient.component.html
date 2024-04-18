@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="bs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKlinika - Početna stranica</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Dodajte link ka vašem CSS fajlu -->
+    <link href="./new-patient.component.css" rel="stylesheet">
+</head>
+
+<body>
+    <app-log-nav></app-log-nav>
+    <main>
+        <div class="container">
+            <h2>Evidencija pacijenata</h2>
+            <!-- Dodaj dugme za dodavanje pacijenta -->
+            <button class="btn btn-primary mb-2" id="dodajPacijenta" (click)="openModal()">Dodaj pacijenta</button>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ime pacijenta</th>
+                        <th>Prezime pacijenta</th>
+                        <th>Datum rođenja</th>
+                        <th>Spol</th>
+                        <th>Adresa</th>
+                        <th>Broj telefona</th>
+                        <th>Uredi</th>
+                        <th>Obrisi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Redovi tabele će biti dinamički generisani -->
+                </tbody>
+            </table>
+            <div class="patient-form" *ngIf="prikazi">
+                <h3>Popunite podatke o pacijentu</h3>
+                <form>
+                    <button class="close-btn" (click)="closeModal()">Zatvori</button>
+            
+                    <div class="form-group">
+                        <label for="imePacijenta">Ime pacijenta:</label>
+                        <input type="text" id="imePacijenta" name="ime" required placeholder="Unesite ime pacijenta">
+                    </div>
+                    <div class="form-group">
+                        <label for="prezimePacijenta">Prezime pacijenta:</label>
+                        <input type="text" id="prezimePacijenta" name="prezime" required placeholder="Unesite prezime pacijenta">
+                    </div>
+                    <div class="form-group">
+                        <label for="datumRodjenja">Datum rođenja:</label>
+                        <input type="date" id="datumRodjenja" name="datumRodjenja" required placeholder="Odaberite datum rođenja">
+                    </div>
+                    <div class="form-group">
+                        <label for="spol">Spol:</label>
+                        <select id="spol" name="spol" required>
+                            <option value="" disabled selected>Odaberite spol</option>
+                            <option value="musko">Muško</option>
+                            <option value="zensko">Žensko</option>
+                            <option value="nepoznato">Nepoznato</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adresa">Adresa:</label>
+                        <input type="text" id="adresa" name="adresa" placeholder="Unesite adresu pacijenta">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefon">Broj telefona:</label>
+                        <input type="tel" id="telefon" name="telefon" placeholder="Unesite broj telefona pacijenta">
+                    </div>
+                    <button type="submit" class="form-group-btn">Potvrdi</button>
+                </form>
+            </div>
+            
+            
+        </div>
+    </main>
+    <app-footer></app-footer>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Dodajte link ka vašem JavaScript fajlu -->
+    <script src="./new-patient.component.ts"></script>
+</body>
+
+</html>
