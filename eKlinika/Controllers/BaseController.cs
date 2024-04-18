@@ -40,6 +40,19 @@ namespace eKlinika.Controllers
 
             return await _service.Update(id, update);
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _service.DeleteById(id);
+            if (success)
+            {
+                return Ok(); // Ako je brisanje uspešno, vraćamo status 200 OK
+            }
+            else
+            {
+                return NotFound(); // Ako entitet nije pronađen, vraćamo status 404 Not Found
+            }
+        }
 
 
     }

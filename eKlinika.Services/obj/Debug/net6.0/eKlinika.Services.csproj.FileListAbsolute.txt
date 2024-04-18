@@ -58,3 +58,5 @@ C:\Users\HOME\Desktop\eKlinika2001\eKlinika.Services\obj\Debug\net6.0\eKlinika.S
 C:\Users\HOME\Desktop\eKlinika2001\eKlinika.Services\obj\Debug\net6.0\refint\eKlinika.Services.dll
 C:\Users\HOME\Desktop\eKlinika2001\eKlinika.Services\obj\Debug\net6.0\eKlinika.Services.pdb
 C:\Users\HOME\Desktop\eKlinika2001\eKlinika.Services\obj\Debug\net6.0\ref\eKlinika.Services.dll
+C:\Users\HOME\Desktop\eKlinika2001\eKlinika.Services\bin\Debug\net6.0\eKlinika.Services.runtimeconfig.json
+C:\Users\HOME\Desktop\eKlinika2001\eKlinika.Services\obj\Debug\net6.0\eKlinika.Services.genruntimeconfig.cache

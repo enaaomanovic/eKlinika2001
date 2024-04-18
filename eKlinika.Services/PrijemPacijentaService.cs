@@ -2,6 +2,7 @@
 using eKlinika.Model.Requests;
 using eKlinika.Model.SearchObject;
 using eKlinika.Services.Base;
+using eKlinika.Services.Context;
 using eKlinika.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace eKlinika.Services
 {
     public class PrijemPacijentaService : BaseService<Model.PrijemPacijenta, Database.PrijemPacijenta, PrijemPacijentaSearchObject, PrijemPacijentaInsertRequest, PrijemPacijentaUpdateRequest>, PrijemPacijentaInterface
     {
-        public PrijemPacijentaService(IMapper mapper) : base(mapper)
+        public PrijemPacijentaService(eKlinikaContext context, IMapper mapper) : base(context, mapper)
         {
         }
     }

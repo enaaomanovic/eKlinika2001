@@ -2,6 +2,7 @@
 using eKlinika.Model.Requests;
 using eKlinika.Model.SearchObject;
 using eKlinika.Services.Base;
+using eKlinika.Services.Context;
 using eKlinika.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace eKlinika.Services
 {
     public class NalazService : BaseService<Model.Nalaz, Database.Nalaz, NalazSearchObject, NalazInsertRequest, NalazUpdateRequest>, NalazInterface
     {
-        public NalazService(IMapper mapper) : base(mapper)
+        public NalazService(eKlinikaContext context, IMapper mapper) : base(context, mapper)
         {
         }
     }

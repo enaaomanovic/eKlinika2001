@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using eKlinika.Services.Context;
 using FitnessCentar.Model.SearchObject;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,31 +16,96 @@ namespace eKlinika.Services.Base
         : BaseSearchObject where TInsert : class where TUpdate : class
 
     {
+        protected eKlinikaContext _context;
         protected IMapper _mapper { get; set; }
 
-        public BaseService(  IMapper mapper)
+        public BaseService(eKlinikaContext context, IMapper mapper)
         {
-            //_context = context;
+            _context = context;
             _mapper = mapper;
         }
-        public Task<List<T>> Get(TSearch sreach = null)
+
+        public virtual async Task<List<T>> Get(TSearch? search = null)
         {
-            throw new NotImplementedException();
+            var query = _context.Set<TDb>().AsQueryable();
+
+            query = AddFilter(query, search);
+            query = AddInclude(query);
+
+            var list = await query.ToListAsync();
+
+            return _mapper.Map<List<T>>(list);
         }
 
-        public Task<T> GetById(int id)
+        public virtual async Task<T> GetById(int id)
         {
-            throw new NotImplementedException();
+
+            var entity = await _context.Set<TDb>().FindAsync(id);
+
+            return _mapper.Map<T>(entity);
         }
 
-        public Task<T> Insert(TInsert insert)
+
+        public virtual async Task<T> Insert(TInsert insert)
         {
-            throw new NotImplementedException();
+            var set = _context.Set<TDb>();
+            TDb entity = _mapper.Map<TDb>(insert);
+            set.Add(entity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<T>(entity);
         }
 
-        public Task<T> Update(int id, TUpdate update)
+        public virtual async Task<T> Update(int id, TUpdate update)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var set = _context.Set<TDb>();
+                var entity = await set.FindAsync(id);
+                _mapper.Map(update, entity);
+
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<T>(entity);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Greška prilikom čuvanja promena u bazi podataka: {ex.Message}");
+                throw;
+            }
+        }
+        public virtual async Task<bool> DeleteById(int id)
+        {
+            try
+            {
+                var set = _context.Set<TDb>();
+                var entity = await set.FindAsync(id);
+
+                if (entity != null)
+                {
+                    set.Remove(entity);
+                    await _context.SaveChangesAsync();
+                    return true; // Uspješno obrisan entitet
+                }
+                else
+                {
+                    return false; // Entitet nije pronađen
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Greška prilikom brisanja entiteta iz baze podataka: {ex.Message}");
+                throw;
+            }
+        }
+
+        public virtual IQueryable<TDb> AddInclude(IQueryable<TDb> query)
+        {
+            return query;
+        }
+        public virtual IQueryable<TDb> AddFilter(IQueryable<TDb> query, TSearch? search = null)
+        {
+            return query;
         }
     }
 }
