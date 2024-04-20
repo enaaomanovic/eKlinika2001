@@ -86,7 +86,9 @@ export class NewPatientComponent implements OnInit {
     this.uredjivanje = false;
   }
   ucitajPacijente() {
-    this.http.get<any[]>(MojConfig.adresa_servera + '/Pacijent').subscribe(
+    const headers = MojConfig.http_opcije();
+
+    this.http.get<any[]>(MojConfig.adresa_servera + '/Pacijent',headers).subscribe(
       (response) => {
         this.pacijenti = response;
         console.log('Podaci o pacijentima:', this.pacijenti);
@@ -99,7 +101,9 @@ export class NewPatientComponent implements OnInit {
 
 
   ucitajPacijenta(pacijentId: any) {
-    this.http.get<any>(MojConfig.adresa_servera + '/Pacijent/' + pacijentId).subscribe(
+    const headers = MojConfig.http_opcije();
+
+    this.http.get<any>(MojConfig.adresa_servera + '/Pacijent/' + pacijentId,headers).subscribe(
       (response) => {
 
         this.myForm.patchValue({
@@ -122,8 +126,12 @@ export class NewPatientComponent implements OnInit {
   btnObrisi(): void {
     console.log("brisanje pozvano");
     if (this.patientToDeleteId) {
-      this.http.delete(MojConfig.adresa_servera + '/Pacijent/' + this.patientToDeleteId).subscribe({
+    const headers = MojConfig.http_opcije();
+
+      this.http.delete(MojConfig.adresa_servera + '/Pacijent/' + this.patientToDeleteId,headers).subscribe({
         next: (x: any) => {
+          this.openSnackBar('Uspješno ste obrisali pacijenta!', 'Zatvori');
+
           this.ucitajPacijente();
           console.log('Pacijent uspješno obrisan:', x);
 
@@ -132,6 +140,8 @@ export class NewPatientComponent implements OnInit {
           this.myForm.reset();
         },
         error: (x: any) => {
+          this.openSnackBar('Pacijent nije obrisan', 'Zatvori');
+
           console.error('Greška pri brisanju pacijenta:', x);
 
 
@@ -146,10 +156,12 @@ export class NewPatientComponent implements OnInit {
     if (this.patientToEditId && this.myForm.valid) {
       const updatedPatientData = this.myForm.value;
       updatedPatientData.spol = parseInt(updatedPatientData.spol);
+      const headers = MojConfig.http_opcije();
 
-      this.http.put<any>(MojConfig.adresa_servera + '/Pacijent/' + this.patientToEditId, updatedPatientData).subscribe({
+      this.http.put<any>(MojConfig.adresa_servera + '/Pacijent/' + this.patientToEditId, updatedPatientData,headers).subscribe({
         next: (response: any) => {
-          this.openSnackBar('Uspješno ste izvršili zahtjev!', 'Zatvori');
+       
+          this.openSnackBar('Uspješno ste ažurirali zahtjev!', 'Zatvori');
 
           console.log('Podaci o pacijentu su uspješno ažurirani:', response);
 
@@ -164,6 +176,7 @@ export class NewPatientComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('Greška pri ažuriranju podataka o pacijentu:', error);
+          this.openSnackBar('Ažuriranje nije uspjelo!', 'Zatvori');
         }
       });
     } else {
@@ -197,10 +210,11 @@ export class NewPatientComponent implements OnInit {
         adresa: adresaControl.value,
         brojTelefona: brojTelefonaControl.value
       };
+      const headers = MojConfig.http_opcije();
 
-      this.http.post(MojConfig.adresa_servera + '/Pacijent', saljemo).subscribe({
+      this.http.post(MojConfig.adresa_servera + '/Pacijent', saljemo,headers).subscribe({
         next: (x: any) => {
-       
+          this.openSnackBar('Uspješno ste izvršili zahtjev!', 'Zatvori');
           console.log('Novi pacijent uspješno dodat:', x);
 
           this.ucitajPacijente(); // Ponovno učitavanje liste pacijenata nakon dodavanja novog
@@ -208,6 +222,8 @@ export class NewPatientComponent implements OnInit {
           this.myForm.reset(); // Resetovanje forme nakon dodavanja
         },
         error: (x: any) => {
+          this.openSnackBar('Pacijent nije dodas!', 'Zatvori');
+
           console.error('Greška pri dodavanju novog pacijenta:', x);
 
 

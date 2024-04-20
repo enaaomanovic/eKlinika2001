@@ -19,9 +19,10 @@
             <form [formGroup]="myForm" (ngSubmit)="btnDodaj()">
                 <div class="form-group">
                     <label for="datumIVrijemePrijema">Datum i vrijeme prijema:</label>
-                    <input type="datetime-local" id="datumIVrijemePrijema" name="datumIVrijemePrijema" required formControlName="datumIVrijemePrijema">
+                    <input type="datetime-local" id="datumIVrijemePrijema" name="datumIVrijemePrijema" required formControlName="datumIVrijemePrijema" [min]="minDateTime">
                     <div *ngIf="myForm.get('datumIVrijemePrijema')?.invalid && myForm.get('datumIVrijemePrijema')?.touched" class="text-danger">Datum i vrijeme su obavezni!</div>
                 </div>
+                
                 
                 <div class="form-group">
                     <label for="nadlezniLjekarId">Odaberite ljekara prijema (specijalista):</label>

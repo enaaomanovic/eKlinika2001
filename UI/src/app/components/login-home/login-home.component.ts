@@ -12,12 +12,14 @@ export class LoginHomeComponent implements OnInit {
   prijemPacijenta: any;
   pacijenti: any[] = [];
   ljekari: any[] = [];
+ 
 
   constructor(private http: HttpClient) { }
 
   async getPrijemPacijenta() {
     try {
-      const response = await firstValueFrom(this.http.get(MojConfig.adresa_servera + "/PrijemPacijenta"));
+      const headers = MojConfig.http_opcije();
+      const response = await firstValueFrom(this.http.get(MojConfig.adresa_servera + "/PrijemPacijenta",headers));
       this.prijemPacijenta = response;
     } catch (error) {
       console.error('Greška pri dobijanju podataka:', error);
@@ -26,7 +28,8 @@ export class LoginHomeComponent implements OnInit {
 
   async getPacijent(pacijentId: number): Promise<void> {
     try {
-      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Pacijent/" + pacijentId));
+      const headers = MojConfig.http_opcije();
+      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Pacijent/" + pacijentId,headers));
       this.pacijenti[pacijentId] = `${response.ime} ${response.prezime}`;
     } catch (error) {
       console.error('Greška pri dobijanju podataka o pacijentu:', error);
@@ -36,7 +39,9 @@ export class LoginHomeComponent implements OnInit {
 
   async getLjekar(ljekarId: number): Promise<void> {
     try {
-      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Ljekar/" + ljekarId));
+      const headers = MojConfig.http_opcije();
+
+      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Ljekar/" + ljekarId,headers));
       this.ljekari[ljekarId] = `${response.ime} ${response.prezime} - ${response.sifra}  `;
     } catch (error) {
       console.error('Greška pri dobijanju podataka o ljekaru:', error);

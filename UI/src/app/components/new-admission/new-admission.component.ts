@@ -4,9 +4,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { MojConfig } from 'src/app/moj-config';
 
-import { Query, DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
-import { FilteringEventArgs } from '@syncfusion/ej2-dropdowns';
-import { EmitType } from '@syncfusion/ej2-base';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-new-admission',
@@ -20,9 +18,9 @@ export class NewAdmissionComponent implements OnInit {
   ljekari: any[] = [];
 
   myForm: FormGroup;
+  minDateTime: string;
 
-
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  constructor(private http: HttpClient, private fb: FormBuilder,private _snackBar: MatSnackBar) {
     this.myForm = this.fb.group({
       datumIVrijemePrijema: ['', Validators.required],
       pacijentId: ['', Validators.required],
@@ -30,8 +28,24 @@ export class NewAdmissionComponent implements OnInit {
       hitniPrijem: [false],
 
     });
+    const currentDate = new Date();
+    this.minDateTime = this.formatDateTime(currentDate);
   }
 
+  formatDateTime(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+  openSnackBar(message: string, action: string) {
+    console.log("Poruka bi trebala bit ispisana");
+    this._snackBar.open(message, action, {
+      duration: 2000, 
+    });
+  }
   btnDodaj(): void {
     if (!this.myForm.valid) {
       return;
@@ -53,9 +67,11 @@ export class NewAdmissionComponent implements OnInit {
         hitniPrijem: hitniPrijemControl.value,
 
       };
+      const headers = MojConfig.http_opcije();
 
-      this.http.post(MojConfig.adresa_servera + '/PrijemPacijenta', saljemo).subscribe({
+      this.http.post(MojConfig.adresa_servera + '/PrijemPacijenta', saljemo,headers).subscribe({
         next: (x: any) => {
+          this.openSnackBar('Uspješno ste izviršili zahtjev!', 'Zatvori');
 
           console.log('Novi prijem uspješno dodat:', x);
           this.myForm.reset();
@@ -83,7 +99,9 @@ export class NewAdmissionComponent implements OnInit {
   public sampleData: string[] = [];
 
   ucitajPacijente() {
-    this.http.get<any[]>(MojConfig.adresa_servera + '/Pacijent').subscribe(
+    const headers = MojConfig.http_opcije();
+
+    this.http.get<any[]>(MojConfig.adresa_servera + '/Pacijent',headers).subscribe(
       (response) => {
         this.localData = response.map(pacijent => ({ Name: `${pacijent.ime} ${pacijent.prezime}`, Id: pacijent.id }));
         console.log('Podaci o pacijentima:', this.localData);
@@ -97,7 +115,9 @@ export class NewAdmissionComponent implements OnInit {
 
 
   ucitajLjekare() {
-    this.http.get<any[]>(MojConfig.adresa_servera + '/Ljekar?Titula=' + 0).subscribe(
+    const headers = MojConfig.http_opcije();
+
+    this.http.get<any[]>(MojConfig.adresa_servera + '/Ljekar?Titula=' + 0,headers).subscribe(
       (response) => {
         this.ljekari = response;
         console.log('Podaci o ljekarima:', this.ljekari);

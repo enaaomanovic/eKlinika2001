@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MojConfig } from 'src/app/moj-config';
 
 @Component({
   selector: 'app-log-nav',
@@ -11,5 +12,7 @@ export class LogNavComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  logout(): void {
+    MojConfig.odlogujKorisnika();
+  }
 }

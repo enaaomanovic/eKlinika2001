@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace eKlinika.Controllers
 {
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     public class BaseController<T, TSearch, TInsert, TUpdate> : ControllerBase where T : class where TSearch : class where TInsert : class where TUpdate : class
     {
         private readonly BaseInterface<T, TSearch, TInsert, TUpdate> _service;

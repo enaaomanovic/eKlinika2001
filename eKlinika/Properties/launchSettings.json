@@ -3,6 +3,7 @@
     "eKlinika": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "https://localhost:59904/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

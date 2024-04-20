@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MojConfig } from 'src/app/moj-config';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-new-doctor',
@@ -20,7 +21,7 @@ export class NewDoctorComponent implements OnInit {
   doctorToEditId: any;
 
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  constructor(private http: HttpClient, private fb: FormBuilder,private _snackBar: MatSnackBar) {
 
     this.myForm = this.fb.group({
       ime: ['', Validators.required],
@@ -40,7 +41,12 @@ export class NewDoctorComponent implements OnInit {
     });
 
   }
-
+  openSnackBar(message: string, action: string) {
+    console.log("Poruka bi trebala bit ispisana");
+    this._snackBar.open(message, action, {
+      duration: 2000, 
+    });
+  }
 
 
   ngOnInit(): void {
@@ -85,7 +91,9 @@ export class NewDoctorComponent implements OnInit {
   }
 
   ucitajLjekara(ljekarId: any) {
-    this.http.get<any>(MojConfig.adresa_servera + '/Ljekar/' + ljekarId).subscribe(
+    const headers = MojConfig.http_opcije();
+
+    this.http.get<any>(MojConfig.adresa_servera + '/Ljekar/' + ljekarId,headers).subscribe(
       (response) => {
 
         this.myFormForEdit.patchValue({
@@ -109,35 +117,20 @@ export class NewDoctorComponent implements OnInit {
       const updatedDoctorData = this.myFormForEdit.value;
       updatedDoctorData.titula = parseInt(updatedDoctorData.titula);
 
+      // Uklonimo provjeru trenutne titule i nastavimo s ažuriranjem
+      const headers = MojConfig.http_opcije();
 
-      this.getTitulaForDoctor(this.doctorToEditId).then((currentTitula: number) => {
-
-        if (currentTitula === 0) {
-          console.error('Nije moguće mijenjati titulu ljekara "Specijalista".');
-          return;
+      this.http.put<any>(MojConfig.adresa_servera + '/Ljekar/' + this.doctorToEditId, updatedDoctorData, headers).subscribe({
+        next: (response: any) => {
+          this.openSnackBar('Uspješno ste ažurilali zahtjev!', 'Zatvori');
+          console.log('Podaci o ljekaru su uspješno ažurirani:', response);
+          this.ucitajLjekare();
+          this.uredjivanje = false;
+          this.myFormForEdit.reset();
+        },
+        error: (error: any) => {
+          console.error('Greška pri ažuriranju podataka o ljekaru:', error);
         }
-
-
-
-
-        this.http.put<any>(MojConfig.adresa_servera + '/Ljekar/' + this.doctorToEditId, updatedDoctorData).subscribe({
-          next: (response: any) => {
-            console.log('Podaci o ljekaru su uspješno ažurirani:', response);
-
-
-            this.ucitajLjekare();
-
-
-            this.uredjivanje = false;
-
-            this.myFormForEdit.reset();
-          },
-          error: (error: any) => {
-            console.error('Greška pri ažuriranju podataka o ljekaru:', error);
-          }
-        });
-      }).catch((error: any) => {
-        console.error('Greška pri dohvaćanju trenutne titule ljekara:', error);
       });
     } else {
       console.error('Neispravni podaci za ažuriranje ljekara ili nije odabran ljekar za uređivanje.');
@@ -145,25 +138,11 @@ export class NewDoctorComponent implements OnInit {
   }
 
 
-  getTitulaForDoctor(doctorId: number): Promise<number> {
-    return new Promise((resolve, reject) => {
-
-      this.http.get<any>(MojConfig.adresa_servera + '/Ljekar/' + doctorId).subscribe({
-        next: (response: any) => {
-
-          const titula = response.titula;
-          resolve(titula);
-        },
-        error: (error: any) => {
-          console.error('Greška pri dohvaćanju podataka o ljekaru:', error);
-          reject(error);
-        }
-      });
-    });
-  }
 
   ucitajLjekare() {
-    this.http.get<any[]>(MojConfig.adresa_servera + '/Ljekar').subscribe(
+    const headers = MojConfig.http_opcije();
+
+    this.http.get<any[]>(MojConfig.adresa_servera + '/Ljekar',headers).subscribe(
       (response) => {
         this.ljekari = response;
         console.log('Podaci o ljekarima:', this.ljekari);
@@ -199,11 +178,14 @@ export class NewDoctorComponent implements OnInit {
         lozinka: lozinkaControl.value
 
       };
+      
+      const headers = MojConfig.http_opcije();
 
-      this.http.post(MojConfig.adresa_servera + '/Ljekar', saljemo).subscribe({
+      this.http.post(MojConfig.adresa_servera + '/Ljekar', saljemo,headers).subscribe({
         next: (x: any) => {
           this.ucitajLjekare();
           console.log('Novi ljekar uspješno dodat:', x);
+          this.openSnackBar('Uspješno ste izviršili zahtjev!', 'Zatvori');
 
           this.ucitajLjekare();
           this.prikazi = false;
@@ -222,8 +204,12 @@ export class NewDoctorComponent implements OnInit {
   btnObrisi(): void {
     console.log("brisanje pozvano");
     if (this.doctorToDeleteId) {
-      this.http.delete(MojConfig.adresa_servera + '/Ljekar/' + this.doctorToDeleteId).subscribe({
+      const headers = MojConfig.http_opcije();
+
+      this.http.delete(MojConfig.adresa_servera + '/Ljekar/' + this.doctorToDeleteId,headers).subscribe({
         next: (x: any) => {
+          this.openSnackBar('Uspješno ste obrisali ljekara!', 'Zatvori');
+
           this.ucitajLjekare();
           console.log('Doktor uspješno obrisan:', x);
 
@@ -233,6 +219,8 @@ export class NewDoctorComponent implements OnInit {
         },
         error: (x: any) => {
           console.error('Greška pri brisanju doktora:', x);
+          this.openSnackBar('Ljekar nije obrisan', 'Zatvori');
+
 
 
         }
