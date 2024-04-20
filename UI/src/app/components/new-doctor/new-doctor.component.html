@@ -5,10 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eKlinika - Početna stranica</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Dodajte link ka vašem CSS fajlu -->
+
     <link href="./new-doctor.component.css" rel="stylesheet">
+    <style>
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,57 +20,163 @@
     <main>
         <div class="container">
             <h2>Evidencija ljekara</h2>
-            <!-- Dodaj dugme za dodavanje pacijenta -->
+
             <button class="btn btn-primary mb-2" id="dodajDoktora" (click)="openModal()">Dodaj ljekara</button>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Ime ljekara</th>
-                        <th>Prezime ljekara</th>
-                        <th>Titula</th>
-                        <th>Sifra</th>
-                        
-                        <th>Uredi</th>
-                        <th>Obrisi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Redovi tabele će biti dinamički generisani -->
-                </tbody>
-            </table>
-            <div class="doctor-form" *ngIf="prikazi">
-                <h3>Popunite podatke o ljekaru</h3>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ime ljekara</th>
+                            <th>Prezime ljekara</th>
+                            <th>Titula</th>
+                            <th>Sifra</th>
+                            <th>Uredi</th>
+                            <th>Obrisi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let ljekar of ljekari">
+                            <tr>
+                                <td>{{ ljekar.ime }}</td>
+                                <td>{{ ljekar.prezime }}</td>
+                                <td>
+                                    {{ ljekar.titula === 0 ? 'Specijalista' : ljekar.titula === 1 ? 'Specijalizant' :
+                                    'Medicinska sestra' }}
+                                </td>
+
+                                <td>{{ ljekar.sifra }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm"
+                                        (click)="openModalUredi(ljekar.id)">Uredi</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm"
+                                        (click)="openModalObrisi(ljekar.id)">Obriši</button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <div class="space">
+
+                </div>
+            </div>
+            <div class="doctor-form" *ngIf="brisanje">
+                <h4>Da li ste sigurni da zelite obrisati ljekara?</h4>
+
+                <h4>Brisanjem ljekara brisu se i prijemi koje je on unosio!</h4>
+
                 <form>
-                    <button class="close-btn" (click)="closeModal()">Zatvori</button>
-            
+                    <button class="close-btn" (click)="closeModalObrisi()">Zatvori</button>
+                    <button type="button" class="form-group-btn" (click)="btnObrisi()">Obrisi</button>
+                </form>
+
+            </div>
+
+            <div class="doctor-form" *ngIf="uredjivanje">
+                <h3>Uredite podatke o ljekaru</h3>
+                <form [formGroup]="myFormForEdit" (ngSubmit)="btnUredi()">
+
+                    <button class="close-btn" (click)="closeModalUredi()">Zatvori</button>
+
                     <div class="form-group">
                         <label for="imeLjekara">Ime ljekara:</label>
-                        <input type="text" id="imeLjekara" name="ime" required placeholder="Unesite ime ljekara">
+                        <input type="text" id="imeLjekara" name="ime" required placeholder="Unesite ime ljekara"
+                            formControlName="ime">
+                        <div *ngIf="myFormForEdit.get('ime')?.invalid && myFormForEdit.get('ime')?.touched"
+                            class="text-danger">Ime je obavezno!</div>
                     </div>
                     <div class="form-group">
                         <label for="prezimeLjekara">Prezime ljekara:</label>
-                        <input type="text" id="prezimeLjekara" name="prezime" required placeholder="Unesite prezime ljekara">
+                        <input type="text" id="prezimeLjekara" name="prezime" required
+                            placeholder="Unesite prezime ljekara" formControlName="prezime">
+                        <div *ngIf="myFormForEdit.get('prezime')?.invalid && myFormForEdit.get('prezime')?.touched"
+                            class="text-danger">Prezime je obavezno!</div>
                     </div>
-                  
+
                     <div class="form-group">
-                        <label for="spol">Titula:</label>
-                        <select id="spol" name="spol" required>
-                            <option value="" disabled selected>Odaberite titulu</option>
-                            <option value="specijalista">Specijalista</option>
-                            <option value="specijalizant">Specijalizant</option>
-                            <option value="med. sestra">Med. sestra</option>
+                        <label for="titula">Titula:</label>
+                        <select id="titula" name="titula" required formControlName="titula">
+                            <option value="0">Specijalista</option>
+                            <option value="1">Specijalizant</option>
+                            <option value="2">Medicinska sestra</option>
                         </select>
+                        <div *ngIf="myFormForEdit.get('titula')?.invalid && myFormForEdit.get('titula')?.touched"
+                            class="text-danger">Molimo odaberite titulu!</div>
                     </div>
                     <div class="form-group">
-                        <label for="adresa">Sifra:</label>
-                        <input type="text" id="Sifra" name="Sifra" placeholder="Unesite sifru ljekara">
+                        <label for="sifra">Sifra:</label>
+                        <input type="text" id="sifra" name="sifra" required placeholder="Unesite sifra"
+                            formControlName="sifra">
+                        <div *ngIf="myFormForEdit.get('sifra')?.invalid && myFormForEdit.get('sifra')?.touched"
+                            class="text-danger">Sifra je obavezna!</div>
                     </div>
-                  
-                    <button type="submit" class="form-group-btn">Potvrdi</button>
+
+                    <button type="submit" class="form-group-btn" [disabled]="myFormForEdit.invalid">Uredi</button>
+
                 </form>
             </div>
-            
-            
+
+            <div class="doctor-form" *ngIf="prikazi">
+                <h3>Popunite podatke o ljekaru</h3>
+                <form [formGroup]="myForm" (ngSubmit)="btnDodaj()">
+                    <button class="close-btn" (click)="closeModal()">Zatvori</button>
+
+                    <div class="form-group">
+                        <label for="imeLjekara">Ime ljekara:</label>
+                        <input type="text" id="imeLjekara" name="ime" required placeholder="Unesite ime ljekara"
+                            formControlName="ime">
+                        <div *ngIf="myForm.get('ime')?.invalid && myForm.get('ime')?.touched" class="text-danger">Ime je
+                            obavezno!</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="prezimeLjekara">Prezime ljekara:</label>
+                        <input type="text" id="prezimeLjekara" name="prezime" required
+                            placeholder="Unesite prezime ljekara" formControlName="prezime">
+                        <div *ngIf="myForm.get('prezime')?.invalid && myForm.get('prezime')?.touched"
+                            class="text-danger">Prezime je obavezno!</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="titula">Titula:</label>
+                        <select id="titula" name="titula" required formControlName="titula">
+                            <option value="0">Specijalista</option>
+                            <option value="1">Specijalizant</option>
+                            <option value="2">Medicinska sestra</option>
+                        </select>
+                        <div *ngIf="myForm.get('titula')?.invalid && myForm.get('titula')?.touched" class="text-danger">
+                            Molimo odaberite titulu!</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sifra">Sifra:</label>
+                        <input type="text" id="sifra" name="sifra" required placeholder="Unesite sifra"
+                            formControlName="sifra">
+                        <div *ngIf="myForm.get('sifra')?.invalid && myForm.get('sifra')?.touched" class="text-danger">
+                            Sifra je obavezna!</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Korisnicko ime:</label>
+                        <input type="text" id="username" name="username" required placeholder="Unesite korisnicko ime"
+                            formControlName="username">
+                        <div *ngIf="myForm.get('username')?.invalid && myForm.get('username')?.touched"
+                            class="text-danger">Korisnicko ime je obavezna!</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lozinka">Lozinka:</label>
+                        <input type="text" id="lozinka" name="lozinka" required placeholder="Unesite lozinku"
+                            formControlName="lozinka">
+                        <div *ngIf="myForm.get('lozinka')?.invalid && myForm.get('lozinka')?.touched"
+                            class="text-danger">Lozinka ime je obavezna!</div>
+                    </div>
+
+                    <button type="submit" class="form-group-btn" [disabled]="myForm.invalid">Potvrdi</button>
+                </form>
+            </div>
+
+
+
+
         </div>
     </main>
     <app-footer></app-footer>

@@ -5,10 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eKlinika - Početna stranica</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Dodajte link ka vašem CSS fajlu -->
+ 
     <link href="./new-patient.component.css" rel="stylesheet">
+    <style>
+       
+        .table-container {
+            max-height: 400px; 
+            overflow-y: auto; 
+        }
+    </style>
 </head>
 
 <body>
@@ -16,70 +21,160 @@
     <main>
         <div class="container">
             <h2>Evidencija pacijenata</h2>
-            <!-- Dodaj dugme za dodavanje pacijenta -->
+          
             <button class="btn btn-primary mb-2" id="dodajPacijenta" (click)="openModal()">Dodaj pacijenta</button>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Ime pacijenta</th>
-                        <th>Prezime pacijenta</th>
-                        <th>Datum rođenja</th>
-                        <th>Spol</th>
-                        <th>Adresa</th>
-                        <th>Broj telefona</th>
-                        <th>Uredi</th>
-                        <th>Obrisi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Redovi tabele će biti dinamički generisani -->
-                </tbody>
-            </table>
+            
+            <div class="table-container">
+             
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ime pacijenta</th>
+                            <th>Prezime pacijenta</th>
+                            <th>Datum rođenja</th>
+                            <th>Spol</th>
+                            <th>Adresa</th>
+                            <th>Broj telefona</th>
+                            <th>Uredi</th>
+                            <th>Obrisi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let pacijent of pacijenti">
+                            <tr>
+                                <td>{{ pacijent.ime }}</td>
+                                <td>{{ pacijent.prezime }}</td>
+                                <td>{{ pacijent.datumRodjenja | date: 'dd.MM.yyyy' }}</td>
+                                <td>{{ pacijent.spol === 0 ? 'Muško' : pacijent.spol === 1 ? 'Žensko' : 'Nepoznato' }}</td>
+                                <td>{{ pacijent.adresa }}</td>
+                                <td>{{ pacijent.brojTelefona }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm"(click)="openModalUredi(pacijent.id)">Uredi</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" (click)="openModalObrisi(pacijent.id)">Obriši</button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <div class="space">
+                    
+                </div>
+            </div>
+        <div class="patient-form" *ngIf="brisanje">
+            <h4>Da li ste sigurni da zelite obrisati pacijenta?</h4>
+        
+            <h4>Brisanjem pacijenta brisu se i njegovi prijemi!</h4>
+        
+            <form >
+                <button class="close-btn" (click)="closeModalObrisi()">Zatvori</button>
+                <button type="button" class="form-group-btn" (click)="btnObrisi()" >Obrisi</button>
+            </form>
+            
+            </div>
             <div class="patient-form" *ngIf="prikazi">
                 <h3>Popunite podatke o pacijentu</h3>
-                <form>
+                <form [formGroup]="myForm" (ngSubmit)="btnDodaj()">
                     <button class="close-btn" (click)="closeModal()">Zatvori</button>
-            
+
                     <div class="form-group">
                         <label for="imePacijenta">Ime pacijenta:</label>
-                        <input type="text" id="imePacijenta" name="ime" required placeholder="Unesite ime pacijenta">
+                        <input type="text" id="imePacijenta" name="ime" required placeholder="Unesite ime pacijenta" formControlName="ime">
+                        <div *ngIf="myForm.get('ime')?.invalid && myForm.get('ime')?.touched" class="text-danger">Ime je obavezno!</div>
                     </div>
+
                     <div class="form-group">
                         <label for="prezimePacijenta">Prezime pacijenta:</label>
-                        <input type="text" id="prezimePacijenta" name="prezime" required placeholder="Unesite prezime pacijenta">
+                        <input type="text" id="prezimePacijenta" name="prezime" required placeholder="Unesite prezime pacijenta" formControlName="prezime">
+                        <div *ngIf="myForm.get('prezime')?.invalid && myForm.get('prezime')?.touched" class="text-danger">Prezime je obavezno!</div>
                     </div>
+
                     <div class="form-group">
                         <label for="datumRodjenja">Datum rođenja:</label>
-                        <input type="date" id="datumRodjenja" name="datumRodjenja" required placeholder="Odaberite datum rođenja">
+                        <input type="date" id="datumRodjenja" name="datumRodjenja" required placeholder="Odaberite datum rođenja" formControlName="datumRodjenja">
+                        <div *ngIf="myForm.get('datumRodjenja')?.invalid && myForm.get('datumRodjenja')?.touched" class="text-danger">Datum rođenja je obavezan!</div>
                     </div>
+
                     <div class="form-group">
                         <label for="spol">Spol:</label>
-                        <select id="spol" name="spol" required>
-                            <option value="" disabled selected>Odaberite spol</option>
-                            <option value="musko">Muško</option>
-                            <option value="zensko">Žensko</option>
-                            <option value="nepoznato">Nepoznato</option>
+                        <select id="spol" name="spol" required formControlName="spol">
+                            <option value="0">Muško</option>
+                            <option value="1">Žensko</option>
+                            <option value="2">Nepoznato</option>
                         </select>
+                        <div *ngIf="myForm.get('spol')?.invalid && myForm.get('spol')?.touched" class="text-danger">Molimo odaberite spol!</div>
                     </div>
+
                     <div class="form-group">
                         <label for="adresa">Adresa:</label>
-                        <input type="text" id="adresa" name="adresa" placeholder="Unesite adresu pacijenta">
+                        <input type="text" id="adresa" name="adresa" placeholder="Unesite adresu pacijenta" formControlName="adresa">
                     </div>
+
                     <div class="form-group">
                         <label for="telefon">Broj telefona:</label>
-                        <input type="tel" id="telefon" name="telefon" placeholder="Unesite broj telefona pacijenta">
+                        <input type="tel" id="telefon" name="telefon" placeholder="Unesite broj telefona pacijenta" formControlName="brojTelefona">
                     </div>
-                    <button type="submit" class="form-group-btn">Potvrdi</button>
+
+                    <button type="submit" class="form-group-btn" [disabled]="myForm.invalid">Potvrdi</button>
                 </form>
             </div>
-            
-            
+
+
+            <div class="patient-form" *ngIf="uredjivanje">
+                <h3>Uredi podatke o pacijentu</h3>
+                <form [formGroup]="myForm" (ngSubmit)="btnUredi()">
+                    <button class="close-btn" (click)="closeModalUredi()">Zatvori</button>
+
+                    <div class="form-group">
+                        <label for="imePacijenta">Ime pacijenta:</label>
+                        <input type="text" id="imePacijenta" name="ime" required placeholder="Unesite ime pacijenta" formControlName="ime">
+                        <div *ngIf="myForm.get('ime')?.invalid && myForm.get('ime')?.touched" class="text-danger">Ime je obavezno!</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prezimePacijenta">Prezime pacijenta:</label>
+                        <input type="text" id="prezimePacijenta" name="prezime" required placeholder="Unesite prezime pacijenta" formControlName="prezime">
+                        <div *ngIf="myForm.get('prezime')?.invalid && myForm.get('prezime')?.touched" class="text-danger">Prezime je obavezno!</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="datumRodjenja">Datum rođenja:</label>
+                        <input type="date" id="datumRodjenja" name="datumRodjenja" required placeholder="Odaberite datum rođenja" formControlName="datumRodjenja">
+                        <div *ngIf="myForm.get('datumRodjenja')?.invalid && myForm.get('datumRodjenja')?.touched" class="text-danger">Datum rođenja je obavezan!</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="spol">Spol:</label>
+                        <select id="spol" name="spol" required formControlName="spol">
+                            <option value="0">Muško</option>
+                            <option value="1">Žensko</option>
+                            <option value="2">Nepoznato</option>
+                        </select>
+                        <div *ngIf="myForm.get('spol')?.invalid && myForm.get('spol')?.touched" class="text-danger">Molimo odaberite spol!</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adresa">Adresa:</label>
+                        <input type="text" id="adresa" name="adresa" placeholder="Unesite adresu pacijenta" formControlName="adresa">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefon">Broj telefona:</label>
+                        <input type="tel" id="telefon" name="telefon" placeholder="Unesite broj telefona pacijenta" formControlName="brojTelefona">
+                    </div>
+
+                    <button type="submit" class="form-group-btn" [disabled]="myForm.invalid">Uredi</button>
+                </form>
+            </div>
         </div>
+        
     </main>
     <app-footer></app-footer>
     <!-- Bootstrap JavaScript -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <!-- Dodajte link ka vašem JavaScript fajlu -->
+ 
     <script src="./new-patient.component.ts"></script>
 </body>
 

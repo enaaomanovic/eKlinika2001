@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eKlinika - Početna stranica</title>
     <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Dodajte link ka vašem CSS fajlu -->
     <link href="./new-admission.component.css" rel="stylesheet">
 </head>
@@ -16,35 +16,43 @@
     <main>
         <div class="container">
             <h2>Unos novog prijema</h2>
-            <form>
+            <form [formGroup]="myForm" (ngSubmit)="btnDodaj()">
                 <div class="form-group">
-                    <label for="datumVrijeme">Datum i vrijeme prijema:</label>
-                    <input type="datetime-local" id="datumVrijeme" name="datumVrijeme" required>
+                    <label for="datumIVrijemePrijema">Datum i vrijeme prijema:</label>
+                    <input type="datetime-local" id="datumIVrijemePrijema" name="datumIVrijemePrijema" required formControlName="datumIVrijemePrijema">
+                    <div *ngIf="myForm.get('datumIVrijemePrijema')?.invalid && myForm.get('datumIVrijemePrijema')?.touched" class="text-danger">Datum i vrijeme su obavezni!</div>
                 </div>
+                
                 <div class="form-group">
-                    <label for="pacijent">Odaberite pacijenta:</label>
-                    <select id="pacijent" name="pacijent" required>
-                        <!-- Ovdje ide lista dostupnih pacijenata -->
-                        <option value="1">Pacijent 1</option>
-                        <option value="2">Pacijent 2</option>
-                        <!-- Dodajte ostale pacijente prema potrebi -->
+                    <label for="nadlezniLjekarId">Odaberite ljekara prijema (specijalista):</label>
+                    <select id="nadlezniLjekarId" name="nadlezniLjekarId" required formControlName="nadlezniLjekarId">
+                        <option value="" disabled selected>Odaberite ljekara</option>
+                        <option *ngFor="let ljekar of ljekari" [value]="ljekar.id">
+                            {{ ljekar.ime }} {{ ljekar.prezime }} - 
+                            {{ ljekar.titula === 0 ? 'Specijalista' : ljekar.titula === 1 ? 'Specijalizant' : 'Medicinska sestra' }}
+                        </option>
                     </select>
+                    <div *ngIf="myForm.get('nadlezniLjekarId')?.invalid && myForm.get('nadlezniLjekarId')?.touched" class="text-danger">Ljekar je obavezan!</div>
                 </div>
-                <div class="form-group">
-                    <label for="ljekar">Odaberite ljekara prijema (specijalista):</label>
-                    <select id="ljekar" name="ljekar" required>
-                        <!-- Ovdje ide lista dostupnih ljekara -->
-                        <option value="1">Ljekar 1</option>
-                        <option value="2">Ljekar 2</option>
-                        <!-- Dodajte ostale ljekare prema potrebi -->
-                    </select>
+               
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <div style="width: 50%;">
+                        <label for="pacijentId">Odaberite Pacijenta:</label>
+                        <ejs-dropdownlist  [dataSource]='localData' [fields]='dataFields' [allowFiltering]='true' 
+                        placeholder='Odaberi pacijenta' [ignoreAccent]='true' style="width: 100%;" formControlName="pacijentId">
+                        </ejs-dropdownlist>
+                    </div>
+                    <div class="form-group-hitni-prijem" style="margin-left: 20px;">
+                        <label for="hitniPrijem">Hitni slučaj:</label>
+                       
+                         <input type="checkbox" formControlName="hitniPrijem" [checked]="false">
+
+                    </div>
                 </div>
-                <div class="form-group-hitni-prijem">
-                    <label for="hitniPrijem">Hitni slučaj:</label>
-                    <input type="checkbox" id="hitniPrijem" name="hitniPrijem">
-                </div>
+                
                 <button type="submit">Spasi prijem</button>
             </form>
+            
         </div>
     </main>
     

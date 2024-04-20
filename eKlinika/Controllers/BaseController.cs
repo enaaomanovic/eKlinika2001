@@ -1,9 +1,11 @@
 ﻿using eKlinika.Services.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eKlinika.Controllers
 {
     [Route("[controller]")]
+    //[Authorize]
     public class BaseController<T, TSearch, TInsert, TUpdate> : ControllerBase where T : class where TSearch : class where TInsert : class where TUpdate : class
     {
         private readonly BaseInterface<T, TSearch, TInsert, TUpdate> _service;
@@ -46,11 +48,11 @@ namespace eKlinika.Controllers
             var success = await _service.DeleteById(id);
             if (success)
             {
-                return Ok(); // Ako je brisanje uspešno, vraćamo status 200 OK
+                return Ok(); 
             }
             else
             {
-                return NotFound(); // Ako entitet nije pronađen, vraćamo status 404 Not Found
+                return NotFound(); 
             }
         }
 

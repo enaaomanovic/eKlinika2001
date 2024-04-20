@@ -85,11 +85,11 @@ namespace eKlinika.Services.Base
                 {
                     set.Remove(entity);
                     await _context.SaveChangesAsync();
-                    return true; // Uspješno obrisan entitet
+                    return true; 
                 }
                 else
                 {
-                    return false; // Entitet nije pronađen
+                    return false; 
                 }
             }
             catch (Exception ex)
@@ -98,6 +98,8 @@ namespace eKlinika.Services.Base
                 throw;
             }
         }
+
+
 
         public virtual IQueryable<TDb> AddInclude(IQueryable<TDb> query)
         {

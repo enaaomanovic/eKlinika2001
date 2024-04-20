@@ -15,6 +15,15 @@ import { LogNavComponent } from './components/log-nav/log-nav.component';
 import { NewPatientComponent } from './components/new-patient/new-patient.component';
 import { NewDoctorComponent } from './components/new-doctor/new-doctor.component';
 import { NewAdmissionComponent } from './components/new-admission/new-admission.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 @NgModule({
   declarations: [
@@ -26,14 +35,25 @@ import { NewAdmissionComponent } from './components/new-admission/new-admission.
     LogNavComponent,
     NewPatientComponent,
     NewDoctorComponent,
-    NewAdmissionComponent
+    NewAdmissionComponent,
+
+ 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatToolbarModule, // Dodajte MatToolbarModule
-    MatButtonModule // Dodajte MatButtonModule
+    MatToolbarModule, 
+    MatButtonModule, 
+    HttpClientModule,
+    FormsModule ,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    DropDownListModule,
+     ButtonModule,
+     MatSnackBarModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -10,8 +10,11 @@ namespace eKlinika.Services.Database
     {
         public int Id { get; set; }
         public DateTime DatumIVrijemePrijema { get; set; }
-        public Pacijent Pacijent { get; set; }
-        public Ljekar NadlezniLjekar { get; set; }
-        public bool HitniPrijem { get; set; }
+        public int? PacijentId { get; set; }
+        public virtual  Pacijent? Pacijent { get; set; }
+        public int? NadlezniLjekarId { get; set; }
+
+        public virtual Ljekar? NadlezniLjekar { get; set; }
+        public bool? HitniPrijem { get; set; }
     }
 }

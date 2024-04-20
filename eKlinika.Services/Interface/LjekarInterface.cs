@@ -12,7 +12,7 @@ namespace eKlinika.Services.Interface
 {
     public interface LjekarInterface: BaseInterface < Ljekar, LjekarSearchObject, LjekarInsertRequest, LjekarUpdateRequest>
     {
-        //Ljekar? Authenticiraj(string username, string password);
+        Ljekar? Authenticiraj(string username, string password);
 
     }
 }

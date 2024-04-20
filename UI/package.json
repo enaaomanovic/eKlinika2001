@@ -20,6 +20,8 @@
     "@angular/platform-browser": "~13.1.0",
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
+    "@syncfusion/ej2-angular-buttons": "^25.1.39",
+    "@syncfusion/ej2-angular-dropdowns": "^25.1.40",
     "bootstrap": "^5.3.3",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",

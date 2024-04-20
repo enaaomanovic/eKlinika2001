@@ -5,19 +5,17 @@ namespace eKlinika.Model
 {
     public class PrijemPacijenta
     {
-        [Key]
+   
         public int Id { get; set; }
-        [Required]
-
+       
         public DateTime DatumIVrijemePrijema { get; set; }
-        [Required]
 
-        public Pacijent Pacijent { get; set; }
-        [Required]
+        public int? PacijentId { get; set; }
+   
+        public int? NadlezniLjekarId { get; set; }
 
-        public Ljekar NadlezniLjekar { get; set; }
-        [Required]
+        public bool? HitniPrijem { get; set; }
 
-        public bool HitniPrijem { get; set; }
+
     }
 }

@@ -1,14 +1,14 @@
-/* styles.css */
+
 
 body {
     background-image: url('../../../assets/hospital-homepage.jpg');
-    /* Postavljanje pozadine */
+ 
     background-size: cover;
-    /* Pokrivanje cijelog ekrana */
+   
     background-repeat: no-repeat;
-    /* Spriječavanje ponavljanja pozadine */
+   
     background-position: center center;
-    /* Poravnavanje slike na sredinu */
+    
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -17,7 +17,7 @@ body {
 
 header {
     background-color: rgba(174, 227, 216, 0.8);
-    /* Prilagođena boja sa transparentnošću */
+  
     padding: 20px;
     text-align: center;
 }
@@ -25,19 +25,19 @@ header {
 h1,
 p {
     color: #333;
-    /* Tamnosiva boja teksta */
+ 
 }
 
 main {
     padding: 20px;
     text-align: center;
     color: white;
-    /* Bijela boja teksta za kontrast */
+   
 }
 
 footer {
     background-color: rgba(174, 227, 216, 0.8);
-    /* Prilagođena boja sa transparentnošću */
+  
     padding: 10px;
     text-align: center;
     position: fixed;
@@ -45,18 +45,18 @@ footer {
     width: 100%;
 }
 
-/* Dodajemo stilove za animirani gumb */
+
 .call-to-action {
     background-color: #5c9ead;
-    /* Plava boja */
+    
     color: #fff;
-    /* Bijela boja teksta */
+   
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 18px;
     cursor: pointer;
     animation: pulse 2s infinite alternate;
-    /* Pulsiranje animacija */
+  
 }
 
 @keyframes pulse {
@@ -71,18 +71,18 @@ footer {
 
 .rounded {
     border-radius: 40px;
-    /* Postavljamo radijus zaobljenja */
+   
     background-color: #aee3d8;
-    /* Pastelno zelena boja */
+  
     transition: background-color 0.3s ease;
-    /* Dodana animacija za promjenu boje */
+  
     width: 150px;
-    /* Povećana širina dugmeta */
+ 
 }
 
 .rounded:hover {
     background-color: #90c1b0;
-    /* Promjenjuje boju dugmeta na hover */
+   
 }
 
 .about-us {
@@ -90,91 +90,91 @@ footer {
     margin: 20px auto;
     max-width: 600px;
     background-color: rgba(255, 255, 255, 0.8);
-    /* Bijeli pozadinski sloj */
+   
     padding: 20px;
-    /* Dodan padding */
+   
     border-radius: 10px;
-    /* Dodan zaobljeni rub */
+
 }
 
 .welcome-message {
     text-align: center;
     font-weight: bold;
-    /* Dodano podebljavanje */
+  
     font-size: 24px;
-    /* Povećana veličina fonta */
+  
 }
 
 .about-us h1 {
     font-size: 36px;
-    /* Povećana veličina fonta */
+   
     margin-bottom: 20px;
-    /* Povećan razmak ispod naslova */
+    
 }
 
 .about-us p {
     font-size: 18px;
-    /* Povećana veličina fonta */
+
 }
 
 .login-button {
     background-color: #aee3d8; 
-    /* Plava boja */
+  
     color: black;
-    /* Bijela boja teksta */
+ 
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 18px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    /* Dodana animacija za promjenu boje */
+
 }
 
 .login-button:hover {
     background-color: #90c1b0;
-    /* Promjena boje dugmeta na hover */
+   
 }
 
 .arrow {
     content: '\2192';
-    /* Dodana strelica kao sadržaj */
+  
     font-size: 24px;
-    /* Velicina fonta strelice */
+  
     margin-left: 5px;
-    /* Malo odstupanje od teksta */
+    
 }
 .popup {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff; /* Promenjena boja pozadine u belu */
-    padding: 40px; /* Povećan padding */
-    border-radius: 20px; /* Povećan radijus zaobljenja */
+    background-color: #fff; 
+    padding: 40px;
+    border-radius: 20px; 
     z-index: 9999;
-    max-width: 800px; /* Povećana maksimalna širina */
-    border: 4px solid #333; /* Dodat border sa veličinom 4px i bojom #333 */
+    max-width: 800px; 
+    border: 4px solid #333; 
 }
 
 
 .popup input {
     display: block;
-    margin: 20px auto; /* Povećan razmak između elemenata */
-    padding: 15px; /* Povećana veličina paddinga */
-    width: calc(100% - 30px); /* Prilagođena širina input polja */
-    border-radius: 8px; /* Povećan radijus zaobljenja */
+    margin: 20px auto; 
+    padding: 15px;
+    width: calc(100% - 30px); 
+    border-radius: 8px;
     border: 1px solid #ccc;
-    font-size: 18px; /* Povećana veličina fonta */
+    font-size: 18px;
 }
 
 .popup button {
     display: block;
-    margin: 20px auto; /* Povećan razmak između elemenata */
-    padding: 15px 30px; /* Povećana veličina paddinga */
-    border-radius: 8px; /* Povećan radijus zaobljenja */
+    margin: 20px auto; 
+    padding: 15px 30px; 
+    border-radius: 8px; 
     cursor: pointer;
-    width: calc(100% - 60px); /* Prilagođena širina dugmeta */
-    font-size: 18px; /* Povećana veličina fonta */
+    width: calc(100% - 60px); 
+    font-size: 18px; 
  
 }
 .close-btn {

@@ -13,6 +13,7 @@ namespace eKlinika.Services.Base
         Task<T> GetById(int id);
         Task<T> Insert(TInsert insert);
         Task<T> Update(int id, TUpdate update);
+
         Task<bool> DeleteById(int id);
     }
 }

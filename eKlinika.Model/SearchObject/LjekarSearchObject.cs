@@ -1,4 +1,5 @@
-﻿using FitnessCentar.Model.SearchObject;
+﻿
+using FitnessCentar.Model.SearchObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace eKlinika.Model.SearchObject
 {
     public class LjekarSearchObject:BaseSearchObject
     {
+        public TitulaLjekara? Titula { get; set; }
+
     }
 }
