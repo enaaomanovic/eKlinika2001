@@ -10,6 +10,10 @@ namespace eKlinika.Model.SearchObject
 {
     public class PrijemPacijentaSearchObject : BaseSearchObject
     {
-    
+        public DateTime? DatumIVrijemePrijemaStart { get; set; }
+        public DateTime? DatumIVrijemePrijemaEnd { get; set; }
+
+
+
     }
 }

@@ -42,6 +42,7 @@ export class HomeComponent implements OnInit {
         });
     }
   }
+  
 
   login(username: string, password: string): void {
     // Logika za provjeru korisničkih podataka

@@ -22,13 +22,15 @@
     <main>
         <div class="container">
             <h2>Evidencija prijema pacijenata</h2>
-            <div class="filter-form">
-                <label for="from-date">Od:</label>
-                <input type="date" id="from-date">
-                <label for="to-date">Do:</label>
-                <input type="date" id="to-date">
-                <button id="filter-btn">Filtriraj</button>
-            </div>
+           <!-- login-home.component.html -->
+<div class="filter-form">
+    <label for="from-date">Od:</label>
+    <input type="date" id="from-date">
+    <label for="to-date">Do:</label>
+    <input type="date" id="to-date">
+    <button id="filter-btn" (click)="filterData()">Filtriraj</button>
+</div>
+
 
             <div class="table-container">
                 <table class="table">
@@ -39,8 +41,10 @@
                             <th>Ime i prezime nadležnog ljekara</th>
                             <th>Hitni prijem</th>
                             <th>Akcije</th>
-                            <th>Nalaz</th>
-                            <th>Izvještaj</th>
+                            <th>Otkaži</th>
+                            <th>Kreiraj nalaz</th>
+
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -69,15 +73,19 @@
 
                                 <td>
 
-                                    <button type="button" class="btn btn-primary btn-sm"><i
+                                    <button type="button" class="btn btn-primary btn-sm" (click)="openModal(prijem.id)"><i
                                             class="fas fa-edit"></i></button>
                                 </td>
-                                <td><!-- Dodajte nalaz ako je potreban --></td>
                                 <td>
+                                    <button type="button" class="btn btn-danger btn-sm" (click)="openModalObrisi(prijem.id)"><i class="fas fa-trash"></i></button>
 
-                                    <button type="button" class="btn btn-success btn-sm"><i
-                                            class="fas fa-print"></i></button>
                                 </td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-sm" >
+                                        <i class="fas fa-file-medical"></i>
+                                    </button>
+                                </td>
+                               
                             </tr>
                         </ng-container>
                     </tbody>
@@ -86,6 +94,58 @@
 
                 </div>
             </div>
+        </div>
+        <div class="admission-form" *ngIf="brisanje">
+            <h4>Da li ste sigurni da zelite obrisati prijem?</h4>
+
+            <form>
+                <button class="close-btn" (click)="closeModalObrisi()">Zatvori</button>
+                <button type="button" class="form-group-btn" (click)="btnObrisi()">Obrisi</button>
+            </form>
+
+        </div>
+        <div class="admission-form" *ngIf="prikazi">
+            
+            <h2>Ažuriranje prijema</h2>
+            <form [formGroup]="myForm" (ngSubmit)="btnUredi()">
+                <button class="close-btn" (click)="closeModal()">Zatvori</button>
+                <div class="form-group">
+                    <label for="datumIVrijemePrijema">Datum i vrijeme prijema:</label>
+                    <input type="datetime-local" id="datumIVrijemePrijema" name="datumIVrijemePrijema" required formControlName="datumIVrijemePrijema" [min]="minDateTime">
+                    <div *ngIf="myForm.get('datumIVrijemePrijema')?.invalid && myForm.get('datumIVrijemePrijema')?.touched" class="text-danger">Datum i vrijeme su obavezni!</div>
+                </div>
+                
+                
+             <div class="form-group">
+                    <label for="nadlezniLjekarId">Odaberite ljekara prijema (specijalista):</label>
+                    <select id="nadlezniLjekarId" name="nadlezniLjekarId" required formControlName="nadlezniLjekarId">
+                        <option value="" disabled selected>Odaberite ljekara</option>
+                        <option *ngFor="let ljekar of ljekariZaEdit" [value]="ljekar.id">
+                            {{ ljekar.ime }} {{ ljekar.prezime }} - 
+                            {{ ljekar.titula === 0 ? 'Specijalista' : ljekar.titula === 1 ? 'Specijalizant' : 'Medicinska sestra' }}
+                        </option>
+                    </select>
+                    <div *ngIf="myForm.get('nadlezniLjekarId')?.invalid && myForm.get('nadlezniLjekarId')?.touched" class="text-danger">Ljekar je obavezan!</div>
+                </div> 
+             
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <div style="width: 50%;">
+                        <label for="pacijentId">Odaberite Pacijenta:</label>
+                        <ejs-dropdownlist  [dataSource]='localData' [fields]='dataFields' [allowFiltering]='true' 
+                        placeholder='Odaberi pacijenta' [ignoreAccent]='true' style="width: 100%;" formControlName="pacijentId">
+                        </ejs-dropdownlist>
+                    </div>
+                    <div class="form-group-hitni-prijem" style="margin-left: 20px;">
+                        <label for="hitniPrijem">Hitni slučaj:</label>
+                       
+                         <input type="checkbox" formControlName="hitniPrijem" [checked]="false">
+
+                    </div>
+                </div>
+                
+                <button type="submit" class="form-group-btn" [disabled]="myForm.invalid">Uredi</button>
+            </form>
+            
         </div>
     </main>
     <app-footer></app-footer>
