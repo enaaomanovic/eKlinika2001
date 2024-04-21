@@ -164,7 +164,10 @@ footer {
 }
 
 .admission-form input,
-.admission-form select {
+
+.admission-form input,
+.admission-form select,
+.admission-form textarea {
     display: block;
     margin: 10px auto;
     padding: 8px;
@@ -172,7 +175,9 @@ footer {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 14px;
+    box-sizing: border-box; /* Dodajemo ovo da bi padding i border bili uključeni u izračunatu širinu */
 }
+
 
 .admission-form button {
     display: block;

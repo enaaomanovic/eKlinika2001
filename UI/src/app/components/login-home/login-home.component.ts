@@ -11,9 +11,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./login-home.component.css']
 })
 export class LoginHomeComponent implements OnInit {
-deleteItem(arg0: any) {
-throw new Error('Method not implemented.');
-}
+
+
+
 
   prijemPacijenta: any;
   pacijenti: any[] = [];
@@ -23,11 +23,17 @@ throw new Error('Method not implemented.');
 
   prikazi :boolean=false;
   brisanje :boolean=false;
+  prikaziNalaz:boolean=false;
+  admissionWithANalazId:boolean=false;
 
+  
+  myFormZaNalaz: FormGroup;
   myForm: FormGroup;
   minDateTime: string;
   admissionToEditId: any;
   admissionToDeleteId: any;
+  admissionToAddNalazId:any;
+  DateToAddNalazId: any;
 
   ljekariLoaded: boolean = false;
 
@@ -39,9 +45,70 @@ throw new Error('Method not implemented.');
       hitniPrijem: [false],
 
     });
+    this.myFormZaNalaz = this.fb.group({
+      datumIVrijemeKreiranja: ['', Validators.required],
+      tekstualniOpis: ['', Validators.required],
+  });
+  
     const currentDate = new Date();
     this.minDateTime = this.formatDateTime(currentDate);
   }
+
+  closeModalZaNlaza() {
+    this.prikaziNalaz = false;
+  }
+  openModalZaNalaz(admissionId: any, datumIVrijemePrijema: any) {
+    
+    this.admissionToAddNalazId = admissionId;
+    this.DateToAddNalazId = datumIVrijemePrijema;
+ 
+    console.log(this.admissionToAddNalazId);
+    this.prikaziNalaz = true;
+this.admissionWithANalazId=true;
+    // Postavite vrijednost input polja za datum i vrijeme kreiranja nalaza na datum prijema
+    this.myFormZaNalaz.controls['datumIVrijemeKreiranja'].setValue(datumIVrijemePrijema);
+}
+
+
+btnKreirajNalaz() {
+  console.log("Uslo");
+  if (!this.myFormZaNalaz.valid) {
+    return;
+  }
+  console.log("doslo");
+
+  const tekstualniOpisControl = this.myFormZaNalaz.get('tekstualniOpis');
+
+  if (tekstualniOpisControl) {
+
+    const saljemo = {
+      tekstualniOpis: tekstualniOpisControl.value, // Ispravka ovdje
+      prijemPacijentaId: this.admissionToAddNalazId,
+      datumIVrijemeKreiranja: this.DateToAddNalazId
+    };
+    const headers = MojConfig.http_opcije();
+
+    this.http.post(MojConfig.adresa_servera + '/Nalaz', saljemo, headers).subscribe({
+      next: (x: any) => {
+        this.openSnackBar('Uspješno ste izviršili zahtjev!', 'Zatvori');
+
+        console.log('Nalaz uspješno dodat:', x);
+
+        this.prikaziNalaz = false;
+      },
+      error: (x: any) => {
+        console.error('Greška pri dodavanju nalaza:', x);
+
+
+      }
+    });
+  }
+}
+
+      
+
+
+
   formatDateTime(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
@@ -83,7 +150,6 @@ openSnackBar(message: string, action: string) {
       console.error('Greška pri dobijanju podataka:', error);
     }
   }
-  
 
 
   async getPacijent(pacijentId: number): Promise<void> {
@@ -151,9 +217,7 @@ openSnackBar(message: string, action: string) {
       this.ljekariLoaded = true; 
     }
   }
-  
-  
-  
+
   title = 'angular-dropdownlist';
   public dropdownListFilterType: string = 'Contains';
   public dataFields: Object = { text: 'Name', value: 'Id' };
@@ -174,9 +238,6 @@ openSnackBar(message: string, action: string) {
       }
     );
   }
-
-
-
   openModal(admissionToEditId:any) {
   
     this.admissionToEditId=admissionToEditId;
@@ -208,9 +269,7 @@ openSnackBar(message: string, action: string) {
       }
     );
   }
-  
-  
- 
+
   closeModal() {
     this.prikazi = false;
   }
@@ -254,7 +313,6 @@ openSnackBar(message: string, action: string) {
       console.error('Neispravni podaci za ažuriranje prijema.');
     }
 }
-
 openModalObrisi(admissionId: any) {
   this.admissionToDeleteId = admissionId;
   console.log(this.admissionToDeleteId);

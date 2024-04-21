@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eKlinika.Services.Context;
 
@@ -11,9 +12,11 @@ using eKlinika.Services.Context;
 namespace eKlinika.Services.Migrations
 {
     [DbContext(typeof(eKlinikaContext))]
-    partial class eKlinikaContextModelSnapshot : ModelSnapshot
+    [Migration("20240421142048_addPrijemPacijentaId")]
+    partial class addPrijemPacijentaId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

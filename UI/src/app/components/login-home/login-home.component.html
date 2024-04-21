@@ -81,7 +81,8 @@
 
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-sm" >
+                                    <button type="button" class="btn btn-success btn-sm" (click)="openModalZaNalaz(prijem.id, prijem.datumIVrijemePrijema)"
+                                    >
                                         <i class="fas fa-file-medical"></i>
                                     </button>
                                 </td>
@@ -104,6 +105,29 @@
             </form>
 
         </div>
+        <div class="admission-form" *ngIf="prikaziNalaz">
+            <h2>Kreiranje nalaza</h2>
+            <form [formGroup]="myFormZaNalaz" (ngSubmit)="btnKreirajNalaz()">
+                <button class="close-btn" (click)="closeModalZaNlaza()">Zatvori</button>
+                <div class="form-group">
+                    <label for="datumIVrijemeKreiranja">Datum i vrijeme prijema:</label>
+                    <input type="datetime-local" id="datumIVrijemeKreiranja" name="datumIVrijemeKreiranja" required formControlName="datumIVrijemeKreiranja" [min]="minDateTime" readonly>
+
+                   
+                </div>
+                
+                <div class="form-group">
+                    <label for="tekstualniOpis">Tekstualni opis:</label>
+                    <!-- Koristimo <textarea> element umjesto <input> elementa -->
+                    <textarea id="tekstualniOpis" name="tekstualniOpis" required formControlName="tekstualniOpis" rows="5"></textarea>
+                    <div *ngIf="myFormZaNalaz.get('tekstualniOpis')?.invalid && myFormZaNalaz.get('tekstualniOpis')?.touched" class="text-danger">Text je obavezan!</div>
+                </div>
+                <button type="submit" class="form-group-btn" [disabled]="myFormZaNalaz.invalid">Kreiraj nalaz</button>
+            </form>
+        </div>
+
+      
+
         <div class="admission-form" *ngIf="prikazi">
             
             <h2>Ažuriranje prijema</h2>
