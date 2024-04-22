@@ -9,7 +9,9 @@ import { NewDoctorComponent } from './components/new-doctor/new-doctor.component
 import { NewAdmissionComponent } from './components/new-admission/new-admission.component';
 import { PdfComponent } from './pdf/pdf.component';
 const routes: Routes = [
+  
   { path: '', component: HomeComponent } ,
+  { path: 'home', component: HomeComponent },
   { path: 'login-home', component: LoginHomeComponent } ,
   { path: 'login-home', component: LoginHomeComponent } ,
   { path: 'log-nav', component: LogNavComponent } ,

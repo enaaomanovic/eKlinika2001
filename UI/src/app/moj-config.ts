@@ -1,8 +1,18 @@
+
+
+import { Router } from "@angular/router";
+// import { UnauthorizedInterceptor } from "./unauthorized.interceptor";
 import { HttpHeaders } from "@angular/common/http";
 
 export class MojConfig {
   static adresa_servera = "https://localhost:59904";
   static authTokenKey = 'auth_token';
+
+  static router: Router;
+
+  static postaviRouter(router: Router) {
+    this.router = router;
+  }
 
   static postaviKorisnika(username: string, password: string) {
     localStorage.setItem(this.authTokenKey, btoa(`${username}:${password}`));
@@ -15,6 +25,7 @@ export class MojConfig {
   static getAuthToken(): string | null {
     return localStorage.getItem(this.authTokenKey);
   }
+ 
 
   static http_opcije() {
     const authToken = this.getAuthToken();
@@ -26,6 +37,8 @@ export class MojConfig {
     }
     return { headers: headers };
   }
+
+  static handleUnauthorized() {
+   
+  }
 }
-
-

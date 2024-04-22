@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, firstValueFrom } from 'rxjs';
 import { MojConfig } from 'src/app/moj-config';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-home',
@@ -38,7 +39,8 @@ export class LoginHomeComponent implements OnInit {
 
   ljekariLoaded: boolean = false;
 
-  constructor(private http: HttpClient, private fb: FormBuilder, private _snackBar: MatSnackBar) {
+  constructor(private http: HttpClient, private fb: FormBuilder, private _snackBar: MatSnackBar,private router: Router) {
+   
     this.myForm = this.fb.group({
       datumIVrijemePrijema: ['', Validators.required],
       pacijentId: ['', Validators.required],
@@ -58,6 +60,29 @@ export class LoginHomeComponent implements OnInit {
     const currentDate = new Date();
     this.minDateTime = this.formatDateTime(currentDate);
   }
+  async ngOnInit(): Promise<void> {
+  var nesto=MojConfig.getAuthToken();
+  console.log(nesto);
+    try {
+      this.getNalazi();
+      await this.getPrijemPacijenta();
+
+
+      for (let prijem of this.prijemPacijenta) {
+        this.getLjekar(prijem.nadlezniLjekarId);
+        this.getPacijent(prijem.pacijentId);
+      }
+
+
+      this.ucitajPacijente();
+      this.ucitajLjekare();
+
+
+    } catch (error) {
+      console.error('Greška u ngOnInit metodi:', error);
+    }
+  }
+
 
   closeModalZaNlaza() {
     this.prikaziNalaz = false;
@@ -249,27 +274,6 @@ export class LoginHomeComponent implements OnInit {
   }
 
 
-  async ngOnInit(): Promise<void> {
-    try {
-      this.getNalazi();
-      await this.getPrijemPacijenta();
-
-
-      for (let prijem of this.prijemPacijenta) {
-        this.getLjekar(prijem.nadlezniLjekarId);
-
-        this.getPacijent(prijem.pacijentId);
-      }
-
-
-      this.ucitajPacijente();
-      this.ucitajLjekare();
-
-
-    } catch (error) {
-      console.error('Greška u ngOnInit metodi:', error);
-    }
-  }
 
   ucitajLjekare() {
     if (!this.ljekariLoaded) {

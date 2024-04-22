@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MojConfig } from 'src/app/moj-config';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-new-patient',
@@ -101,6 +102,8 @@ export class NewPatientComponent implements OnInit {
     );
   }
 
+
+  
 
   ucitajPacijenta(pacijentId: any) {
     const headers = MojConfig.http_opcije();

@@ -24,6 +24,8 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PdfComponent } from './pdf/pdf.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { UnauthorizedInterceptor } from './unauthorized.interceptor';
 
 
 @NgModule({
@@ -54,10 +56,18 @@ import { PdfComponent } from './pdf/pdf.component';
     MatSelectModule,
     DropDownListModule,
      ButtonModule,
-     MatSnackBarModule
+     MatSnackBarModule,
+  
+  
 
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: UnauthorizedInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
