@@ -10,6 +10,7 @@ namespace eKlinika.Model.SearchObject
 {
     public class NalazSearchObject  :BaseSearchObject
     {
-    
+        public int? PrijemPacijentaId { get; set; }
+
     }
 }

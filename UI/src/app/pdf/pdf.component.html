@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolnički nalaz</title>
+    <link rel="stylesheet" href="./pdf.component.css">
+
+</head>
+
+<body>
+
+    <app-log-nav></app-log-nav>
+    <div class="scrollable-container">
+        <div class="hospital-report" #content>
+            <img src="../../../assets/Logo.jpg" alt="Logo Image">
+
+            <div class="patient-info">
+                <h2>Ime i prezime pacijenta: {{ pacijent?.ime }} {{ pacijent?.prezime }}</h2>
+                <p><strong>Spol:</strong> {{ pacijent?.spol === 0 ? 'Muško' : pacijent?.spol === 1 ? 'Žensko' :
+                    'Nepoznato' }}</p>
+                <hr>
+                <p><strong>Datum rođenja:</strong> {{ pacijent?.datumRodjenja | date: 'dd.MM.yyyy' }}</p>
+                <p><strong>Adresa:</strong> {{ pacijent?.adresa }}</p>
+                <p><strong>Broj telefona:</strong> {{ pacijent?.brojTelefona }}</p>
+            </div>
+
+            <div class="doctor-info">
+                <h2>Pacijenta primio ljekar: {{ ljekar?.ime }} {{ ljekar?.prezime }}</h2>
+                <p><strong>Titula:</strong> {{ ljekar?.titula === 0 ? 'Specijalista' : ljekar?.titula === 1 ?
+                    'Specijalizant' : 'Medicinska sestra' }}</p>
+                <p><strong>Sifra:</strong> {{ ljekar?.sifra }}</p>
+
+            </div>
+            <div *ngIf="nalazi[id]">
+                <p><strong>Tekstualni opis upisan prilikom kreiranja nalaza:</strong> {{ nalazi[id] }}</p>
+            </div>
+            <div class="emergency-info">
+
+                <p><strong>Pacijent primljen na prijem:</strong> {{ prijem?.datumIVrijemePrijema | date: 'dd.MM.yyyy
+                    HH:mm' }}</p>
+                <p><strong>Hitni slučaj:</strong> {{ prijem?.hitniPrijem ? 'Da' : 'Ne' }}</p>
+
+
+            </div>
+
+
+            <p class="thanks">Zahvaljujemo se na korištenju naših usluga.</p>
+            <input type="button" value="Download PDF" class="btn btn-success pdf-button" (click)="SavePDF()">
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+</body>
+
+
+
+</html>

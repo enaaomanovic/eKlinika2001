@@ -32,7 +32,36 @@ namespace eKlinika.Services
 
             return filteredQuery;
         }
+        public override async Task<bool> DeleteById(int id)
+        {
+            try
+            {
+                var prijem = await _context.PrijemPacijenta.FindAsync(id);
 
+                if (prijem == null)
+                {
+                    return false;
+                }
+
+
+                var nalazi = _context.Nalazi.Where(p => p.PrijemPacijentaId == id);
+
+
+                _context.Nalazi.RemoveRange(nalazi);
+
+
+                _context.PrijemPacijenta.Remove(prijem);
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Greška prilikom brisanja pacijenta i prijema iz baze podataka: {ex.Message}");
+                throw;
+            }
+        }
 
     }
 }

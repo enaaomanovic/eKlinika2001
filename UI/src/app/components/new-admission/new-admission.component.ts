@@ -27,6 +27,7 @@ export class NewAdmissionComponent implements OnInit {
       nadlezniLjekarId: ['', Validators.required],
       hitniPrijem: [false],
 
+
     });
     const currentDate = new Date();
     this.minDateTime = this.formatDateTime(currentDate);
@@ -48,42 +49,41 @@ export class NewAdmissionComponent implements OnInit {
   }
   btnDodaj(): void {
     if (!this.myForm.valid) {
-      return;
+        this.openSnackBar('Forma za unos nije zadovoljena!', 'Zatvori');
+        return;
     }
 
     const datumIVrijemePrijemaControl = this.myForm.get('datumIVrijemePrijema');
-    const ppacijentIdControl = this.myForm.get('pacijentId');
+    const pacijentIdControl = this.myForm.get('pacijentId');
     const nadlezniLjekarIdControl = this.myForm.get('nadlezniLjekarId');
     const hitniPrijemControl = this.myForm.get('hitniPrijem');
 
+    if (datumIVrijemePrijemaControl && pacijentIdControl && nadlezniLjekarIdControl && hitniPrijemControl) {
+        // Provjera vrijednosti hitniPrijem
+        const hitniPrijemValue = hitniPrijemControl.value === true ? true : false;
 
+        const saljemo = {
+            datumIVrijemePrijema: datumIVrijemePrijemaControl.value,
+            pacijentId: pacijentIdControl.value,
+            nadlezniLjekarId: nadlezniLjekarIdControl.value,
+            hitniPrijem: hitniPrijemValue,
+        };
 
-    if (datumIVrijemePrijemaControl && ppacijentIdControl && nadlezniLjekarIdControl && hitniPrijemControl) {
+        const headers = MojConfig.http_opcije();
 
-      const saljemo = {
-        datumIVrijemePrijema: datumIVrijemePrijemaControl.value,
-        pacijentId: ppacijentIdControl.value,
-        nadlezniLjekarId: nadlezniLjekarIdControl.value,
-        hitniPrijem: hitniPrijemControl.value,
-
-      };
-      const headers = MojConfig.http_opcije();
-
-      this.http.post(MojConfig.adresa_servera + '/PrijemPacijenta', saljemo,headers).subscribe({
-        next: (x: any) => {
-          this.openSnackBar('Uspješno ste izviršili zahtjev!', 'Zatvori');
-
-          console.log('Novi prijem uspješno dodat:', x);
-          this.myForm.reset();
-        },
-        error: (x: any) => {
-          console.error('Greška pri dodavanju novog prijema:', x);
-
-
-        }
-      });
+        this.http.post(MojConfig.adresa_servera + '/PrijemPacijenta', saljemo, headers).subscribe({
+            next: (x: any) => {
+                this.openSnackBar('Uspješno ste izvršili zahtjev!', 'Zatvori');
+                console.log('Novi prijem uspješno dodat:', x);
+                this.myForm.reset();
+            },
+            error: (x: any) => {
+                console.error('Greška pri dodavanju novog prijema:', x);
+            }
+        });
     }
-  }
+}
+
 
   ngOnInit(): void {
     this.ucitajLjekare(),

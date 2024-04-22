@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MojConfig } from 'src/app/moj-config';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-new-doctor',
@@ -41,13 +41,15 @@ export class NewDoctorComponent implements OnInit {
     });
 
   }
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string, position: 'left' | 'right' = 'left') {
     console.log("Poruka bi trebala bit ispisana");
-    this._snackBar.open(message, action, {
-      duration: 2000, 
-    });
-  }
-
+    const config = new MatSnackBarConfig();
+    config.duration = 2000;
+    config.horizontalPosition = position === 'left' ? 'start' : 'end';
+    config.verticalPosition = 'bottom';
+    
+    this._snackBar.open(message, action, config);
+}
 
   ngOnInit(): void {
     this.ucitajLjekare();
@@ -133,6 +135,8 @@ export class NewDoctorComponent implements OnInit {
         }
       });
     } else {
+      this.openSnackBar('Forma za unos nije zadovoljena!', 'Zatvori', 'left');
+
       console.error('Neispravni podaci za ažuriranje ljekara ili nije odabran ljekar za uređivanje.');
     }
   }
@@ -156,6 +160,8 @@ export class NewDoctorComponent implements OnInit {
 
   btnDodaj(): void {
     if (!this.myForm.valid) {
+      this.openSnackBar('Forma za unos nije zadovoljena!', 'Zatvori', 'left');
+
       return;
     }
 

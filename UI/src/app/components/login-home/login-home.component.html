@@ -40,9 +40,11 @@
                             <th>Datum i vrijeme prijema</th>
                             <th>Ime i prezime nadležnog ljekara</th>
                             <th>Hitni prijem</th>
-                            <th>Akcije</th>
+                            <th>Uredi</th>
                             <th>Otkaži</th>
                             <th>Kreiraj nalaz</th>
+                            <th>Izvjestaj</th>
+
 
                            
                         </tr>
@@ -86,6 +88,17 @@
                                         <i class="fas fa-file-medical"></i>
                                     </button>
                                 </td>
+                            
+                                    <td>
+                                        <a [routerLink]="['/pdf', { id: prijem.id }]">
+                                            <button type="button" class="btn btn-success btn-sm">
+                                                <i class="fas fa-file-medical"></i>
+                                            </button>
+                                        </a>
+                                    </td>
+                                    
+                                
+                                
                                
                             </tr>
                         </ng-container>
@@ -112,8 +125,6 @@
                 <div class="form-group">
                     <label for="datumIVrijemeKreiranja">Datum i vrijeme prijema:</label>
                     <input type="datetime-local" id="datumIVrijemeKreiranja" name="datumIVrijemeKreiranja" required formControlName="datumIVrijemeKreiranja" [min]="minDateTime" readonly>
-
-                   
                 </div>
                 
                 <div class="form-group">
@@ -122,11 +133,28 @@
                     <textarea id="tekstualniOpis" name="tekstualniOpis" required formControlName="tekstualniOpis" rows="5"></textarea>
                     <div *ngIf="myFormZaNalaz.get('tekstualniOpis')?.invalid && myFormZaNalaz.get('tekstualniOpis')?.touched" class="text-danger">Text je obavezan!</div>
                 </div>
-                <button type="submit" class="form-group-btn" [disabled]="myFormZaNalaz.invalid">Kreiraj nalaz</button>
+                <button type="submit" class="form-group-btn" >Kreiraj nalaz</button>
             </form>
         </div>
-
-      
+        <div class="admission-form" *ngIf="admissionWithANalazId">
+            <h2>Nalaz je već kreiran za ovaj prijem!</h2>
+            <h3>Dopunite tekst nalaza ukoliko je potrebno</h3>
+            <form [formGroup]="myFormZaNalazUredi">
+                <button class="close-btn" (click)="closeModalZaNlazaSaPrijemIdjem()">Zatvori</button>
+                <div class="form-group">
+                    <label for="datumIVrijemeKreiranja">Datum i vrijeme kreiranja:</label>
+                    <input type="datetime-local" id="datumIVrijemeKreiranja" name="datumIVrijemeKreiranja" required formControlName="datumIVrijemeKreiranja" [min]="minDateTime" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tekstualniOpis">Tekstualni opis:</label>
+                    <textarea id="tekstualniOpis" name="tekstualniOpis" required formControlName="tekstualniOpis" rows="5" [readonly]="true">{{ myFormZaNalazUredi.controls['tekstualniOpis'].value }}</textarea>
+                    <div *ngIf="myFormZaNalazUredi.get('tekstualniOpis')?.invalid && myFormZaNalazUredi.get('tekstualniOpis')?.touched" class="text-danger">Text je obavezan!</div>
+                </div>
+                
+            </form>
+        </div>
+    
 
         <div class="admission-form" *ngIf="prikazi">
             

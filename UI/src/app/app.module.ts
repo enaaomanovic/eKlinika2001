@@ -23,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PdfComponent } from './pdf/pdf.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     NewPatientComponent,
     NewDoctorComponent,
     NewAdmissionComponent,
+    PdfComponent,
 
  
   ],

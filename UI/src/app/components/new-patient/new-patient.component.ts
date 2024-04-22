@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MojConfig } from 'src/app/moj-config';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-new-patient',
@@ -48,13 +48,15 @@ export class NewPatientComponent implements OnInit {
     console.log("Open modal method called");
     this.prikazi = true;
   }
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string, position: 'left' | 'right' = 'left') {
     console.log("Poruka bi trebala bit ispisana");
-    this._snackBar.open(message, action, {
-      duration: 2000, 
-    });
-  }
-
+    const config = new MatSnackBarConfig();
+    config.duration = 2000;
+    config.horizontalPosition = position === 'left' ? 'start' : 'end';
+    config.verticalPosition = 'bottom';
+    
+    this._snackBar.open(message, action, config);
+}
   closeModal() {
     console.log("close modal method called");
     this.prikazi = false;
@@ -152,7 +154,7 @@ export class NewPatientComponent implements OnInit {
 
   btnUredi(): void {
     console.log("Uređivanje pozvano");
-
+  
     if (this.patientToEditId && this.myForm.valid) {
       const updatedPatientData = this.myForm.value;
       updatedPatientData.spol = parseInt(updatedPatientData.spol);
@@ -180,6 +182,9 @@ export class NewPatientComponent implements OnInit {
         }
       });
     } else {
+  
+      this.openSnackBar('Forma za unos nije zadovoljena!', 'Zatvori', 'left');
+
       console.error('Neispravni podaci za ažuriranje pacijenta ili nije odabran pacijent za uređivanje.');
     }
   }
@@ -189,7 +194,12 @@ export class NewPatientComponent implements OnInit {
 
   btnDodaj(): void {
     if (!this.myForm.valid) {
+      this.openSnackBar('Forma za unos nije zadovoljena!', 'Zatvori', 'left');
+
+
       return;
+ 
+    
     }
 
     const imeControl = this.myForm.get('ime');

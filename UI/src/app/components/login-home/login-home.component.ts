@@ -13,31 +13,32 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class LoginHomeComponent implements OnInit {
 
 
-
-
   prijemPacijenta: any;
   pacijenti: any[] = [];
   ljekari: any[] = [];
   ljekariZaEdit: any[] = [];
+  nalazi: any[] = [];
 
 
-  prikazi :boolean=false;
-  brisanje :boolean=false;
-  prikaziNalaz:boolean=false;
-  admissionWithANalazId:boolean=false;
 
-  
+  prikazi: boolean = false;
+  brisanje: boolean = false;
+  prikaziNalaz: boolean = false;
+  admissionWithANalazId: boolean = false;
+
+
+  myFormZaNalazUredi: FormGroup;
   myFormZaNalaz: FormGroup;
   myForm: FormGroup;
   minDateTime: string;
   admissionToEditId: any;
   admissionToDeleteId: any;
-  admissionToAddNalazId:any;
+  admissionToAddNalazId: any;
   DateToAddNalazId: any;
 
   ljekariLoaded: boolean = false;
 
-  constructor(private http: HttpClient, private fb: FormBuilder,private _snackBar: MatSnackBar) { 
+  constructor(private http: HttpClient, private fb: FormBuilder, private _snackBar: MatSnackBar) {
     this.myForm = this.fb.group({
       datumIVrijemePrijema: ['', Validators.required],
       pacijentId: ['', Validators.required],
@@ -48,8 +49,12 @@ export class LoginHomeComponent implements OnInit {
     this.myFormZaNalaz = this.fb.group({
       datumIVrijemeKreiranja: ['', Validators.required],
       tekstualniOpis: ['', Validators.required],
-  });
-  
+    });
+    this.myFormZaNalazUredi = this.fb.group({
+      datumIVrijemeKreiranja: ['', Validators.required],
+      tekstualniOpis: ['', Validators.required],
+    });
+
     const currentDate = new Date();
     this.minDateTime = this.formatDateTime(currentDate);
   }
@@ -57,76 +62,129 @@ export class LoginHomeComponent implements OnInit {
   closeModalZaNlaza() {
     this.prikaziNalaz = false;
   }
-  openModalZaNalaz(admissionId: any, datumIVrijemePrijema: any) {
-    
+  closeModalZaNlazaSaPrijemIdjem() {
+    this.admissionWithANalazId = false;
+
+  }
+
+
+  async openModalZaNalaz(admissionId: any, datumIVrijemePrijema: any) {
     this.admissionToAddNalazId = admissionId;
     this.DateToAddNalazId = datumIVrijemePrijema;
- 
+    this.myFormZaNalaz.reset();
     console.log(this.admissionToAddNalazId);
-    this.prikaziNalaz = true;
-this.admissionWithANalazId=true;
-    // Postavite vrijednost input polja za datum i vrijeme kreiranja nalaza na datum prijema
-    this.myFormZaNalaz.controls['datumIVrijemeKreiranja'].setValue(datumIVrijemePrijema);
-}
+
+    try {
+
+      await this.getNalazi();
 
 
-btnKreirajNalaz() {
-  console.log("Uslo");
-  if (!this.myFormZaNalaz.valid) {
-    return;
-  }
-  console.log("doslo");
+      const nalaziZaPrijemId = this.nalazi.find((nalaz: any) => nalaz.prijemPacijentaId === admissionId);
 
-  const tekstualniOpisControl = this.myFormZaNalaz.get('tekstualniOpis');
+      if (nalaziZaPrijemId) {
 
-  if (tekstualniOpisControl) {
+        const nalaz = await this.getNalaziById(nalaziZaPrijemId.id);
 
-    const saljemo = {
-      tekstualniOpis: tekstualniOpisControl.value, // Ispravka ovdje
-      prijemPacijentaId: this.admissionToAddNalazId,
-      datumIVrijemeKreiranja: this.DateToAddNalazId
-    };
-    const headers = MojConfig.http_opcije();
-
-    this.http.post(MojConfig.adresa_servera + '/Nalaz', saljemo, headers).subscribe({
-      next: (x: any) => {
-        this.openSnackBar('Uspješno ste izviršili zahtjev!', 'Zatvori');
-
-        console.log('Nalaz uspješno dodat:', x);
-
+        this.admissionWithANalazId = true;
         this.prikaziNalaz = false;
-      },
-      error: (x: any) => {
-        console.error('Greška pri dodavanju nalaza:', x);
 
 
+        this.myFormZaNalazUredi.patchValue({
+          datumIVrijemeKreiranja: nalaz.datumIVrijemeKreiranja,
+          tekstualniOpis: nalaz.tekstualniOpis
+        });
+      } else {
+
+        this.admissionWithANalazId = false;
+        this.prikaziNalaz = true;
       }
-    });
-  }
-}
+    } catch (error) {
+      console.error('Greška pri otvaranju modala za nalaz:', error);
+    }
 
-      
+
+    this.myFormZaNalaz.controls['datumIVrijemeKreiranja'].setValue(datumIVrijemePrijema);
+  }
+
+
+  async getNalaziById(nalazId: number): Promise<any> {
+    try {
+      const headers = MojConfig.http_opcije();
+      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Nalaz/" + nalazId, headers));
+      console.log('Odgovor od getNalazi za id:', response);
+
+      return response;
+
+    } catch (error) {
+      console.error('Greška pri dobijanju podataka o nalazu:', error);
+      return null;
+    }
+  }
+
+
+  btnKreirajNalaz() {
+    console.log("Uslo");
+    if (!this.myFormZaNalaz.valid) {
+      this.openSnackBar('Forma za unos nije zadovoljena!', 'Zatvori');
+
+      return;
+    }
+    console.log("doslo");
+
+    const tekstualniOpisControl = this.myFormZaNalaz.get('tekstualniOpis');
+
+    if (tekstualniOpisControl) {
+
+      const saljemo = {
+        tekstualniOpis: tekstualniOpisControl.value,
+        prijemPacijentaId: this.admissionToAddNalazId,
+        datumIVrijemeKreiranja: this.DateToAddNalazId
+      };
+      const headers = MojConfig.http_opcije();
+
+      this.http.post(MojConfig.adresa_servera + '/Nalaz', saljemo, headers).subscribe({
+        next: (x: any) => {
+
+          this.openSnackBar('Uspješno ste izviršili zahtjev!', 'Zatvori');
+
+          this.myFormZaNalaz.reset();
+
+          console.log('Nalaz uspješno dodat:', x);
+
+          this.prikaziNalaz = false;
+
+        },
+        error: (x: any) => {
+          console.error('Greška pri dodavanju nalaza:', x);
+
+
+        }
+      });
+    }
+  }
+
+
 
 
 
   formatDateTime(date: Date): string {
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${year}-${month}-${day}T${hours}:${minutes}`;
-}
-openSnackBar(message: string, action: string) {
-  console.log("Poruka bi trebala bit ispisana");
-  this._snackBar.open(message, action, {
-    duration: 2000, 
-  });
-}
+  }
+  openSnackBar(message: string, action: string) {
+    console.log("Poruka bi trebala bit ispisana");
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
   async getPrijemPacijenta() {
     try {
       const headers = MojConfig.http_opcije();
-      const response = await firstValueFrom(this.http.get(MojConfig.adresa_servera + "/PrijemPacijenta",headers));
+      const response = await firstValueFrom(this.http.get(MojConfig.adresa_servera + "/PrijemPacijenta", headers));
       this.prijemPacijenta = response;
     } catch (error) {
       console.error('Greška pri dobijanju podataka:', error);
@@ -140,10 +198,10 @@ openSnackBar(message: string, action: string) {
     const toDate = (document.getElementById('to-date') as HTMLInputElement).value;
     try {
       console.log("uslo u filter");
-  
+
       const headers = MojConfig.http_opcije();
       const response = await firstValueFrom(this.http.get(MojConfig.adresa_servera +
-         "/PrijemPacijenta?DatumIVrijemePrijemaStart=" + fromDate + '&DatumIVrijemePrijemaEnd=' + toDate,headers));
+        "/PrijemPacijenta?DatumIVrijemePrijemaStart=" + fromDate + '&DatumIVrijemePrijemaEnd=' + toDate, headers));
       this.prijemPacijenta = response;
       console.log(response);
     } catch (error) {
@@ -155,7 +213,7 @@ openSnackBar(message: string, action: string) {
   async getPacijent(pacijentId: number): Promise<void> {
     try {
       const headers = MojConfig.http_opcije();
-      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Pacijent/" + pacijentId,headers));
+      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Pacijent/" + pacijentId, headers));
       this.pacijenti[pacijentId] = `${response.ime} ${response.prezime}`;
     } catch (error) {
       console.error('Greška pri dobijanju podataka o pacijentu:', error);
@@ -163,48 +221,61 @@ openSnackBar(message: string, action: string) {
     }
   }
 
+  async getNalazi(): Promise<void> {
+    try {
+      const headers = MojConfig.http_opcije();
+      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Nalaz", headers));
+      this.nalazi = response;
+      console.log('Odgovor od getNalazi:', response);
+    } catch (error) {
+      console.error('Greška pri dobijanju podataka o pacijentu:', error);
+
+    }
+  }
+
   async getLjekar(ljekarId: number): Promise<void> {
     try {
       console.log('Pozivam getLjekar sa ID:', ljekarId);
       const headers = MojConfig.http_opcije();
-  
+
       const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Ljekar/" + ljekarId, headers));
       console.log('Odgovor od getLjekar:', response);
-  
+
       this.ljekari[ljekarId] = `${response.ime} ${response.prezime} - ${response.sifra}`;
     } catch (error) {
       console.error('Greška pri dobijanju podataka o ljekaru:', error);
       this.ljekari[ljekarId] = 'Nepoznato';
     }
   }
-  
+
 
   async ngOnInit(): Promise<void> {
     try {
+      this.getNalazi();
       await this.getPrijemPacijenta();
-  
-  
+
+
       for (let prijem of this.prijemPacijenta) {
         this.getLjekar(prijem.nadlezniLjekarId);
 
         this.getPacijent(prijem.pacijentId);
       }
-  
-  
+
+
       this.ucitajPacijente();
       this.ucitajLjekare();
-       
-      
+
+
     } catch (error) {
       console.error('Greška u ngOnInit metodi:', error);
     }
   }
-  
+
   ucitajLjekare() {
     if (!this.ljekariLoaded) {
       const headers = MojConfig.http_opcije();
-  
-      this.http.get<any[]>(MojConfig.adresa_servera + '/Ljekar?Titula=' + 0,headers).subscribe(
+
+      this.http.get<any[]>(MojConfig.adresa_servera + '/Ljekar?Titula=' + 0, headers).subscribe(
         (response) => {
           this.ljekariZaEdit = response;
           console.log('Podaci o ljekarima:', this.ljekariZaEdit);
@@ -213,8 +284,8 @@ openSnackBar(message: string, action: string) {
           console.error('Greška pri dobijanju podataka o ljekarima:', error);
         }
       );
-  
-      this.ljekariLoaded = true; 
+
+      this.ljekariLoaded = true;
     }
   }
 
@@ -228,7 +299,7 @@ openSnackBar(message: string, action: string) {
     console.log("uslo");
     const headers = MojConfig.http_opcije();
 
-    this.http.get<any[]>(MojConfig.adresa_servera + '/Pacijent',headers).subscribe(
+    this.http.get<any[]>(MojConfig.adresa_servera + '/Pacijent', headers).subscribe(
       (response) => {
         this.localData = response.map(pacijent => ({ Name: `${pacijent.ime} ${pacijent.prezime}`, Id: pacijent.id }));
         console.log('Podaci o pacijentima:', this.localData);
@@ -238,19 +309,19 @@ openSnackBar(message: string, action: string) {
       }
     );
   }
-  openModal(admissionToEditId:any) {
-  
-    this.admissionToEditId=admissionToEditId;
+  openModal(admissionToEditId: any) {
+
+    this.admissionToEditId = admissionToEditId;
     this.ucitajAdmission(this.admissionToEditId);
-   
+
     console.log(admissionToEditId);
 
     this.prikazi = true;
- 
+
   }
   ucitajAdmission(admissionToEditId: any) {
     const headers = MojConfig.http_opcije();
-  
+
     this.http.get<any>(MojConfig.adresa_servera + '/PrijemPacijenta/' + admissionToEditId, headers).subscribe(
       (response) => {
         this.myForm.patchValue({
@@ -259,9 +330,9 @@ openSnackBar(message: string, action: string) {
           nadlezniLjekarId: response.nadlezniLjekarId,
           hitniPrijem: response.hitniPrijem
         });
-  
+
         console.log('Podaci o prijemu:', response);
-  
+
 
       },
       (error) => {
@@ -287,7 +358,7 @@ openSnackBar(message: string, action: string) {
           nadlezniLjekarId: nadlezniLjekarIdControl.value,
           hitniPrijem: hitniPrijemControl.value,
         };
-       
+
         const headers = MojConfig.http_opcije();
 
         this.http.put<any>(MojConfig.adresa_servera + '/PrijemPacijenta/' + this.admissionToEditId, updatedadmissionData, headers).subscribe({
@@ -296,9 +367,9 @@ openSnackBar(message: string, action: string) {
             console.log('Podaci o prijemu su uspješno ažurirani:', response);
             this.getPrijemPacijenta();
             console.log('ucitavanje podataka:', response);
-           this.getLjekar(response.nadlezniLjekarId);
-           this.getPacijent(response.pacijentId);
-           
+            this.getLjekar(response.nadlezniLjekarId);
+            this.getPacijent(response.pacijentId);
+
             this.myForm.reset();
             this.prikazi = false;
           },
@@ -310,45 +381,46 @@ openSnackBar(message: string, action: string) {
         console.error('Nije moguće pristupiti kontrolama forme.');
       }
     } else {
+      this.openSnackBar('Forma za unos nije zadovoljena!', 'Zatvori');
       console.error('Neispravni podaci za ažuriranje prijema.');
     }
-}
-openModalObrisi(admissionId: any) {
-  this.admissionToDeleteId = admissionId;
-  console.log(this.admissionToDeleteId);
-  this.brisanje = true;
-
-  console.log("Open modal for brisanje method called");
-}
-
-closeModalObrisi() {
-  console.log("close modal for delete method called");
-  this.brisanje = false;
-}
-btnObrisi(): void {
-  console.log("brisanje pozvano");
-  if (this.admissionToDeleteId) {
-    const headers = MojConfig.http_opcije();
-
-    this.http.delete(MojConfig.adresa_servera + '/PrijemPacijenta/' + this.admissionToDeleteId,headers).subscribe({
-      next: (x: any) => {
-        this.openSnackBar('Uspješno ste obrisali prijem!', 'Zatvori');
-
-        this.ucitajLjekare();
-        console.log('Doktor uspješno obrisan:', x);
-
-        this.getPrijemPacijenta();
-
-        this.brisanje = false;
-        this.myForm.reset();
-      },
-      error: (x: any) => {
-        console.error('Greška pri brisanju doktora:', x);
-        this.openSnackBar('Prijem nije obrisan', 'Zatvori');
-      }
-    });
   }
-}
+  openModalObrisi(admissionId: any) {
+    this.admissionToDeleteId = admissionId;
+    console.log(this.admissionToDeleteId);
+    this.brisanje = true;
+
+    console.log("Open modal for brisanje method called");
+  }
+
+  closeModalObrisi() {
+    console.log("close modal for delete method called");
+    this.brisanje = false;
+  }
+  btnObrisi(): void {
+    console.log("brisanje pozvano");
+    if (this.admissionToDeleteId) {
+      const headers = MojConfig.http_opcije();
+
+      this.http.delete(MojConfig.adresa_servera + '/PrijemPacijenta/' + this.admissionToDeleteId, headers).subscribe({
+        next: (x: any) => {
+          this.openSnackBar('Uspješno ste obrisali prijem!', 'Zatvori');
+
+          this.ucitajLjekare();
+          console.log('Doktor uspješno obrisan:', x);
+
+          this.getPrijemPacijenta();
+
+          this.brisanje = false;
+          this.myForm.reset();
+        },
+        error: (x: any) => {
+          console.error('Greška pri brisanju doktora:', x);
+          this.openSnackBar('Prijem nije obrisan', 'Zatvori');
+        }
+      });
+    }
+  }
 
 }
 

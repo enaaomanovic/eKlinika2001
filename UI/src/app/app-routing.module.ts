@@ -7,6 +7,7 @@ import { LogNavComponent } from './components/log-nav/log-nav.component';
 import { NewPatientComponent } from './components/new-patient/new-patient.component';
 import { NewDoctorComponent } from './components/new-doctor/new-doctor.component';
 import { NewAdmissionComponent } from './components/new-admission/new-admission.component';
+import { PdfComponent } from './pdf/pdf.component';
 const routes: Routes = [
   { path: '', component: HomeComponent } ,
   { path: 'login-home', component: LoginHomeComponent } ,
@@ -15,6 +16,8 @@ const routes: Routes = [
   { path: 'new-patient', component: NewPatientComponent } ,
   { path: 'new-doctor', component: NewDoctorComponent } ,
   { path: 'new-admission', component: NewAdmissionComponent } ,
+  { path: 'pdf', component: PdfComponent } ,
+
 
 
 
