@@ -1,0 +1,37 @@
+version: '3'
+services:
+
+  eklinika_sql:
+    container_name: app_db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Enaa!2001
+      - MSSQL_PID=Developer
+    ports:
+      - 1405:1433
+    expose:
+      - 1433
+    networks:
+      - eklinikanet2023
+
+  eklinika_api:
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - ConnectionStrings:DefaultConnection=Data Source=eklinika_sql,1433;Initial Catalog=eKlinikaDatabase2001;User=sa;Password=Enaa!2001;ConnectRetryCount=0;TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 5266:80
+    networks:
+      - eklinikanet2023
+    depends_on:
+      - eklinika_sql
+
+volumes:
+  eklinika_data:
+networks:
+  eklinikanet2023:
+    driver: bridge

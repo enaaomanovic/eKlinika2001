@@ -21,6 +21,7 @@
                 <p>Dobrodošli u našu <span style="font-size: 20px;">savremenu bolnicu</span>, gdje se posvećujemo pružanju vrhunske zdravstvene njege. Naša misija je osigurati najbolju moguću njegu našim pacijentima, a zadovoljstvo klijenata nam je apsolutni prioritet. U našem timu imamo stručne ljekare koji su posvećeni vašem zdravlju i dobrobiti. U našoj bolnici, vaše zdravlje je u sigurnim rukama. Hvala vam što ste odabrali našu bolnicu za vaše zdravstvene potrebe.</p>
                 <button mat-button color="primary" class="rounded login-button" (click)="openModal()">Login<span class="arrow"></span></button>
               
+               
                 <div class="popup" *ngIf="prikazi">
                     <button class="close-btn" (click)="closeModal()">Zatvori</button>
                     <form [formGroup]="loginForm">

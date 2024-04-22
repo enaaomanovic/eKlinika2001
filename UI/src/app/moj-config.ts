@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { HttpHeaders } from "@angular/common/http";
 
 export class MojConfig {
-  static adresa_servera = "https://localhost:59904";
+  static adresa_servera = "http://localhost:5266";
   static authTokenKey = 'auth_token';
 
   static router: Router;
