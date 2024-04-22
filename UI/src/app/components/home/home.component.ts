@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   loginForm: FormGroup;
   prikazi: boolean = false;
 
-  constructor(private router: Router, private http: HttpClient, private fb: FormBuilder,private _snackBar: MatSnackBar) {
+  constructor(private router: Router, private http: HttpClient, private fb: FormBuilder, private _snackBar: MatSnackBar) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       lozinka: ['', Validators.required]
@@ -31,12 +31,12 @@ export class HomeComponent implements OnInit {
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('lozinka')?.value;
-     
+
       MojConfig.postaviKorisnika(username, password);
-  
-      const headers = MojConfig.http_opcije(); 
-  
-      this.http.get<any>(MojConfig.adresa_servera+'/Ljekar', headers)
+
+      const headers = MojConfig.http_opcije();
+
+      this.http.get<any>(MojConfig.adresa_servera + '/Ljekar', headers)
         .subscribe({
           next: (data) => {
             console.log('Uspješno logiranje', data);
@@ -51,18 +51,18 @@ export class HomeComponent implements OnInit {
           }
         });
     }
-    else{
-    this.openSnackBar('Popunite ispravno polja!', 'Zatvori');
+    else {
+      this.openSnackBar('Popunite ispravno polja!', 'Zatvori');
     }
   }
-  
+
 
   login(username: string, password: string): void {
     // Logika za provjeru korisničkih podataka
     // Nakon uspješnog prijavljivanja
     MojConfig.postaviKorisnika(username, password);
   }
-  
+
   ngOnInit(): void {
     this.prikazi = false;
   }

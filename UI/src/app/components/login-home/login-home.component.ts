@@ -12,22 +12,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./login-home.component.css']
 })
 export class LoginHomeComponent implements OnInit {
-
-
   prijemPacijenta: any;
   pacijenti: any[] = [];
   ljekari: any[] = [];
   ljekariZaEdit: any[] = [];
   nalazi: any[] = [];
-
-
-
   prikazi: boolean = false;
   brisanje: boolean = false;
   prikaziNalaz: boolean = false;
   admissionWithANalazId: boolean = false;
-
-
   myFormZaNalazUredi: FormGroup;
   myFormZaNalaz: FormGroup;
   myForm: FormGroup;
@@ -36,7 +29,6 @@ export class LoginHomeComponent implements OnInit {
   admissionToDeleteId: any;
   admissionToAddNalazId: any;
   DateToAddNalazId: any;
-
   ljekariLoaded: boolean = false;
 
   constructor(private http: HttpClient, private fb: FormBuilder, private _snackBar: MatSnackBar,private router: Router) {
@@ -61,22 +53,16 @@ export class LoginHomeComponent implements OnInit {
     this.minDateTime = this.formatDateTime(currentDate);
   }
   async ngOnInit(): Promise<void> {
-  var nesto=MojConfig.getAuthToken();
-  console.log(nesto);
+  
     try {
       this.getNalazi();
       await this.getPrijemPacijenta();
-
-
       for (let prijem of this.prijemPacijenta) {
         this.getLjekar(prijem.nadlezniLjekarId);
         this.getPacijent(prijem.pacijentId);
       }
-
-
       this.ucitajPacijente();
       this.ucitajLjekare();
-
 
     } catch (error) {
       console.error('Greška u ngOnInit metodi:', error);
@@ -92,18 +78,14 @@ export class LoginHomeComponent implements OnInit {
 
   }
 
-
   async openModalZaNalaz(admissionId: any, datumIVrijemePrijema: any) {
     this.admissionToAddNalazId = admissionId;
     this.DateToAddNalazId = datumIVrijemePrijema;
     this.myFormZaNalaz.reset();
-    console.log(this.admissionToAddNalazId);
+  
 
     try {
-
       await this.getNalazi();
-
-
       const nalaziZaPrijemId = this.nalazi.find((nalaz: any) => nalaz.prijemPacijentaId === admissionId);
 
       if (nalaziZaPrijemId) {
@@ -148,13 +130,12 @@ export class LoginHomeComponent implements OnInit {
 
 
   btnKreirajNalaz() {
-    console.log("Uslo");
+   
     if (!this.myFormZaNalaz.valid) {
       this.openSnackBar('Forma za unos nije zadovoljena!', 'Zatvori');
-
       return;
     }
-    console.log("doslo");
+   
 
     const tekstualniOpisControl = this.myFormZaNalaz.get('tekstualniOpis');
 
@@ -182,15 +163,10 @@ export class LoginHomeComponent implements OnInit {
         error: (x: any) => {
           console.error('Greška pri dodavanju nalaza:', x);
 
-
         }
       });
     }
   }
-
-
-
-
 
   formatDateTime(date: Date): string {
     const year = date.getFullYear();
@@ -201,7 +177,7 @@ export class LoginHomeComponent implements OnInit {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
   openSnackBar(message: string, action: string) {
-    console.log("Poruka bi trebala bit ispisana");
+   
     this._snackBar.open(message, action, {
       duration: 2000,
     });
@@ -216,13 +192,11 @@ export class LoginHomeComponent implements OnInit {
     }
   }
 
-
-
   async filterData() {
     const fromDate = (document.getElementById('from-date') as HTMLInputElement).value;
     const toDate = (document.getElementById('to-date') as HTMLInputElement).value;
     try {
-      console.log("uslo u filter");
+   
 
       const headers = MojConfig.http_opcije();
       const response = await firstValueFrom(this.http.get(MojConfig.adresa_servera +
@@ -300,7 +274,7 @@ export class LoginHomeComponent implements OnInit {
   public sampleData: string[] = [];
 
   ucitajPacijente() {
-    console.log("uslo");
+   
     const headers = MojConfig.http_opcije();
 
     this.http.get<any[]>(MojConfig.adresa_servera + '/Pacijent', headers).subscribe(
@@ -318,10 +292,7 @@ export class LoginHomeComponent implements OnInit {
     this.admissionToEditId = admissionToEditId;
     this.ucitajAdmission(this.admissionToEditId);
 
-    console.log(admissionToEditId);
-
     this.prikazi = true;
-
   }
   ucitajAdmission(admissionToEditId: any) {
     const headers = MojConfig.http_opcije();
@@ -391,18 +362,17 @@ export class LoginHomeComponent implements OnInit {
   }
   openModalObrisi(admissionId: any) {
     this.admissionToDeleteId = admissionId;
-    console.log(this.admissionToDeleteId);
+  
     this.brisanje = true;
 
-    console.log("Open modal for brisanje method called");
   }
 
   closeModalObrisi() {
-    console.log("close modal for delete method called");
+   
     this.brisanje = false;
   }
   btnObrisi(): void {
-    console.log("brisanje pozvano");
+ 
     if (this.admissionToDeleteId) {
       const headers = MojConfig.http_opcije();
 

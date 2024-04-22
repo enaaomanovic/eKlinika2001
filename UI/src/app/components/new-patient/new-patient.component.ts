@@ -12,22 +12,16 @@ import { map } from 'rxjs';
 
 })
 
-
-
 export class NewPatientComponent implements OnInit {
 
   prikazi: boolean = false;
   brisanje: boolean = false;
   uredjivanje: boolean = false;
-
   pacijent: any;
   pacijenti: any[] = [];
   myForm: FormGroup;
   patientToDeleteId: any;
   patientToEditId: any;
-
-
-
 
   constructor(private http: HttpClient, private fb: FormBuilder,private _snackBar: MatSnackBar) {
 
@@ -46,11 +40,11 @@ export class NewPatientComponent implements OnInit {
   }
 
   openModal() {
-    console.log("Open modal method called");
+
     this.prikazi = true;
   }
   openSnackBar(message: string, action: string, position: 'left' | 'right' = 'left') {
-    console.log("Poruka bi trebala bit ispisana");
+    
     const config = new MatSnackBarConfig();
     config.duration = 2000;
     config.horizontalPosition = position === 'left' ? 'start' : 'end';
@@ -59,19 +53,18 @@ export class NewPatientComponent implements OnInit {
     this._snackBar.open(message, action, config);
 }
   closeModal() {
-    console.log("close modal method called");
+ 
     this.prikazi = false;
   }
 
   openModalObrisi(pacijentId: any) {
     this.patientToDeleteId = pacijentId;
-    console.log(pacijentId);
-    console.log("Open modal for brisanje method called");
+   
     this.brisanje = true;
   }
 
   closeModalObrisi() {
-    console.log("close modal for delete method called");
+
     this.brisanje = false;
   }
 
@@ -79,13 +72,12 @@ export class NewPatientComponent implements OnInit {
     this.patientToEditId = pacijentId;
     this.ucitajPacijenta(this.patientToEditId);
 
-    console.log(pacijentId);
-    console.log("Open modal for brisanje method called");
+  
     this.uredjivanje = true;
   }
 
   closeModalUredi() {
-    console.log("close modal for delete method called");
+
     this.uredjivanje = false;
   }
   ucitajPacijente() {
@@ -129,7 +121,7 @@ export class NewPatientComponent implements OnInit {
   }
 
   btnObrisi(): void {
-    console.log("brisanje pozvano");
+   
     if (this.patientToDeleteId) {
     const headers = MojConfig.http_opcije();
 
@@ -156,8 +148,7 @@ export class NewPatientComponent implements OnInit {
   }
 
   btnUredi(): void {
-    console.log("Uređivanje pozvano");
-  
+    
     if (this.patientToEditId && this.myForm.valid) {
       const updatedPatientData = this.myForm.value;
       updatedPatientData.spol = parseInt(updatedPatientData.spol);
@@ -219,7 +210,7 @@ export class NewPatientComponent implements OnInit {
         ime: imeControl.value,
         prezime: prezimeControl.value,
         datumRodjenja: datumRodjenjaControl.value,
-        spol: parseInt(spolControl.value), // Pretvaranje stringa u broj
+        spol: parseInt(spolControl.value), 
         adresa: adresaControl.value,
         brojTelefona: brojTelefonaControl.value
       };
@@ -230,9 +221,9 @@ export class NewPatientComponent implements OnInit {
           this.openSnackBar('Uspješno ste izvršili zahtjev!', 'Zatvori');
           console.log('Novi pacijent uspješno dodat:', x);
 
-          this.ucitajPacijente(); // Ponovno učitavanje liste pacijenata nakon dodavanja novog
-          this.prikazi = false; // Zatvaranje modalnog prozora nakon dodavanja
-          this.myForm.reset(); // Resetovanje forme nakon dodavanja
+          this.ucitajPacijente(); 
+          this.prikazi = false; 
+          this.myForm.reset(); 
         },
         error: (x: any) => {
           this.openSnackBar('Pacijent nije dodas!', 'Zatvori');

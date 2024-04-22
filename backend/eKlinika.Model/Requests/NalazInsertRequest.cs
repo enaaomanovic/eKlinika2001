@@ -11,12 +11,10 @@ namespace eKlinika.Model.Requests
     {
      
         [Required]
-
         public string TekstualniOpis { get; set; }
         [Required]
         public int? PrijemPacijentaId { get; set; }
         [Required]
-
         public DateTime DatumIVrijemeKreiranja { get; set; }
     }
 

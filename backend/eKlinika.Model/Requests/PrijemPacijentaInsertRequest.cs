@@ -10,14 +10,10 @@ namespace eKlinika.Model.Requests
     public class PrijemPacijentaInsertRequest
     {
         [Required]
-
         public DateTime DatumIVrijemePrijema { get; set; }
         [Required]
-
-
         public int? PacijentId { get; set; }
         [Required]
-
         public int? NadlezniLjekarId { get; set; }
         [Required]
 

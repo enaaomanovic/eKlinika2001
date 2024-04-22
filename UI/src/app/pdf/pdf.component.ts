@@ -20,7 +20,7 @@ export class PdfComponent implements OnInit{
   pacijent:any;
   ljekar:any;
   nalazi: any[] = [];
-;
+
  
 
   constructor(private http: HttpClient,private route: ActivatedRoute,) {
@@ -29,15 +29,10 @@ export class PdfComponent implements OnInit{
   ngOnInit(): void {
     this.getPrijemPacijenta(this.id);
     this.getNalaz(this.id);
-    console.log(this.id);
+   
 
- 
-  
+
   }
-
-
-
-
 
   @ViewChild('content') content!: ElementRef;
 
@@ -46,9 +41,9 @@ export class PdfComponent implements OnInit{
       const headers = MojConfig.http_opcije();
       const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/PrijemPacijenta/" + prijemId, headers));
       this.prijem = response;
-      // Dohvati podatke o pacijentu
+   
       await this.getPacijent(this.prijem.pacijentId);
-      // Dohvati podatke o ljekaru
+      
       await this.getLjekar(this.prijem.nadlezniLjekarId);
       console.log('Podaci o prijemu pacijenta:', this.prijem);
     } catch (error) {
@@ -95,37 +90,50 @@ export class PdfComponent implements OnInit{
         this.nalazi[prijemPacijentaId] = 'Nije uneseno';
     }
 }
+async getPacijentImePrezime(pacijentId: number): Promise<string> {
+  try {
+      const headers = MojConfig.http_opcije();
+      const response = await firstValueFrom(this.http.get<any>(MojConfig.adresa_servera + "/Pacijent/" + pacijentId, headers));
+      return `${response.ime} ${response.prezime}`;
+  } catch (error) {
+      console.error('Greška pri dobijanju podataka o pacijentu:', error);
+      return 'Nepoznato Ime Prezime';
+  }
+}
 
 
-  public SavePDF(): void {
-    if (!this.content) {
-        console.error('Element "content" not available.');
-        return;
-    }
-    const pdfButton = document.querySelector('.pdf-button') as HTMLElement | null;
-    if (pdfButton) {
-        pdfButton.style.display = 'none';
-    }
+public async SavePDF(): Promise<void> {
+  if (!this.content) {
+      console.error('Element "content" not available.');
+      return;
+  }
+  const pdfButton = document.querySelector('.pdf-button') as HTMLElement | null;
+  if (pdfButton) {
+      pdfButton.style.display = 'none';
+  }
 
-    const content = this.content.nativeElement;
+  const content = this.content.nativeElement;
 
-    html2canvas(content, { scale: 2 }).then((canvas: HTMLCanvasElement) => {
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgData = canvas.toDataURL('image/jpeg', 1.0); // Povećajte kvalitetu slike ako je potrebno
+  try {
+      const pacijentImePrezime = await this.getPacijentImePrezime(this.pacijent.id);
+      const pdfName = `${pacijentImePrezime}_izvjestaj.pdf`;
 
-        // Prilagodite dimenzije slike
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = pdfWidth;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      html2canvas(content, { scale: 2 }).then((canvas: HTMLCanvasElement) => {
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const imgData = canvas.toDataURL('image/jpeg', 1.0); 
 
-        // Dodajte smanjenu sliku na PDF
-        pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+          const imgWidth = pdfWidth;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        pdf.save('test.pdf');
-    }).catch(error => {
-        console.error('Error occurred while generating PDF:', error);
-    });
+          pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+
+          pdf.save(pdfName);
+      });
+  } catch (error) {
+      console.error('Error occurred while generating PDF:', error);
+  }
 }
 
 

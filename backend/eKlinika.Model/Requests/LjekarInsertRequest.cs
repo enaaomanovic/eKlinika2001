@@ -12,20 +12,14 @@ namespace eKlinika.Model.Requests
         [Required]
         public string Ime { get; set; }
         [Required]
-
         public string Prezime { get; set; }
         [Required]
-
         public TitulaLjekara Titula { get; set; }
         [Required]
-
         public string Sifra { get; set; }
         [Required]
-
         public string Username { get; set; }
         [Required]
-
-
         public string Lozinka { get; set; }
     }
 }

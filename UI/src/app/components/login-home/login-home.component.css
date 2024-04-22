@@ -177,7 +177,7 @@ footer {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 14px;
-    box-sizing: border-box; /* Dodajemo ovo da bi padding i border bili uključeni u izračunatu širinu */
+    box-sizing: border-box; 
 }
 
 

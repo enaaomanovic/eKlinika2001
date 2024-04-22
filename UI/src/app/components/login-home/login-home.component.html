@@ -22,7 +22,7 @@
     <main>
         <div class="container">
             <h2>Evidencija prijema pacijenata</h2>
-           <!-- login-home.component.html -->
+         
 <div class="filter-form">
     <label for="from-date">Od:</label>
     <input type="date" id="from-date">
@@ -129,7 +129,7 @@
                 
                 <div class="form-group">
                     <label for="tekstualniOpis">Tekstualni opis:</label>
-                    <!-- Koristimo <textarea> element umjesto <input> elementa -->
+           
                     <textarea id="tekstualniOpis" name="tekstualniOpis" required formControlName="tekstualniOpis" rows="5"></textarea>
                     <div *ngIf="myFormZaNalaz.get('tekstualniOpis')?.invalid && myFormZaNalaz.get('tekstualniOpis')?.touched" class="text-danger">Text je obavezan!</div>
                 </div>

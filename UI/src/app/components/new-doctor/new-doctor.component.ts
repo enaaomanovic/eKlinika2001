@@ -16,7 +16,6 @@ export class NewDoctorComponent implements OnInit {
   ljekari: any[] = [];
   myForm: FormGroup;
   myFormForEdit: FormGroup;
-
   doctorToDeleteId: any;
   doctorToEditId: any;
 
@@ -42,7 +41,7 @@ export class NewDoctorComponent implements OnInit {
 
   }
   openSnackBar(message: string, action: string, position: 'left' | 'right' = 'left') {
-    console.log("Poruka bi trebala bit ispisana");
+    
     const config = new MatSnackBarConfig();
     config.duration = 2000;
     config.horizontalPosition = position === 'left' ? 'start' : 'end';
@@ -56,25 +55,25 @@ export class NewDoctorComponent implements OnInit {
   }
 
   openModal() {
-    console.log("Open modal method called");
+  
     this.prikazi = true;
   }
 
   closeModal() {
-    console.log("close modal method called");
+   
     this.prikazi = false;
   }
 
   openModalObrisi(ljekarId: any) {
     this.doctorToDeleteId = ljekarId;
-    console.log(this.doctorToDeleteId);
+
     this.brisanje = true;
 
-    console.log("Open modal for brisanje method called");
+
   }
 
   closeModalObrisi() {
-    console.log("close modal for delete method called");
+  
     this.brisanje = false;
   }
 
@@ -82,13 +81,12 @@ export class NewDoctorComponent implements OnInit {
     this.doctorToEditId = ljekarId;
     this.ucitajLjekara(this.doctorToEditId);
 
-    console.log(ljekarId);
-    console.log("Open modal for brisanje method called");
+
     this.uredjivanje = true;
   }
 
   closeModalUredi() {
-    console.log("close modal for delete method called");
+  
     this.uredjivanje = false;
   }
 
@@ -114,12 +112,12 @@ export class NewDoctorComponent implements OnInit {
     );
   }
   btnUredi(): void {
-    console.log("Uređivanje pozvano");
+    
     if (this.doctorToEditId && this.myFormForEdit.valid) {
       const updatedDoctorData = this.myFormForEdit.value;
       updatedDoctorData.titula = parseInt(updatedDoctorData.titula);
 
-      // Uklonimo provjeru trenutne titule i nastavimo s ažuriranjem
+   
       const headers = MojConfig.http_opcije();
 
       this.http.put<any>(MojConfig.adresa_servera + '/Ljekar/' + this.doctorToEditId, updatedDoctorData, headers).subscribe({
@@ -208,7 +206,7 @@ export class NewDoctorComponent implements OnInit {
 
 
   btnObrisi(): void {
-    console.log("brisanje pozvano");
+  
     if (this.doctorToDeleteId) {
       const headers = MojConfig.http_opcije();
 
@@ -226,8 +224,6 @@ export class NewDoctorComponent implements OnInit {
         error: (x: any) => {
           console.error('Greška pri brisanju doktora:', x);
           this.openSnackBar('Ljekar nije obrisan', 'Zatvori');
-
-
 
         }
       });

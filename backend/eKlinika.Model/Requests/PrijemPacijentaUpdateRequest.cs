@@ -12,7 +12,6 @@ namespace eKlinika.Model.Requests
         public DateTime DatumIVrijemePrijema { get; set; }
 
         public int? PacijentId { get; set; }
-  
 
         public int? NadlezniLjekarId { get; set; }
 

@@ -1,14 +1,12 @@
-
-
 body {
     background-image: url('../../../assets/hospital-homepage.jpg');
- 
+
     background-size: cover;
-   
+
     background-repeat: no-repeat;
-   
+
     background-position: center center;
-    
+
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -17,7 +15,7 @@ body {
 
 header {
     background-color: rgba(174, 227, 216, 0.8);
-  
+
     padding: 20px;
     text-align: center;
 }
@@ -25,19 +23,19 @@ header {
 h1,
 p {
     color: #333;
- 
+
 }
 
 main {
     padding: 20px;
     text-align: center;
     color: white;
-   
+
 }
 
 footer {
     background-color: rgba(174, 227, 216, 0.8);
-  
+
     padding: 10px;
     text-align: center;
     position: fixed;
@@ -48,15 +46,15 @@ footer {
 
 .call-to-action {
     background-color: #5c9ead;
-    
+
     color: #fff;
-   
+
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 18px;
     cursor: pointer;
     animation: pulse 2s infinite alternate;
-  
+
 }
 
 @keyframes pulse {
@@ -71,18 +69,18 @@ footer {
 
 .rounded {
     border-radius: 40px;
-   
+
     background-color: #aee3d8;
-  
+
     transition: background-color 0.3s ease;
-  
+
     width: 150px;
- 
+
 }
 
 .rounded:hover {
     background-color: #90c1b0;
-   
+
 }
 
 .about-us {
@@ -90,9 +88,9 @@ footer {
     margin: 20px auto;
     max-width: 600px;
     background-color: rgba(255, 255, 255, 0.8);
-   
+
     padding: 20px;
-   
+
     border-radius: 10px;
 
 }
@@ -100,16 +98,16 @@ footer {
 .welcome-message {
     text-align: center;
     font-weight: bold;
-  
+
     font-size: 24px;
-  
+
 }
 
 .about-us h1 {
     font-size: 36px;
-   
+
     margin-bottom: 20px;
-    
+
 }
 
 .about-us p {
@@ -118,10 +116,10 @@ footer {
 }
 
 .login-button {
-    background-color: #aee3d8; 
-  
+    background-color: #aee3d8;
+
     color: black;
- 
+
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 18px;
@@ -132,36 +130,37 @@ footer {
 
 .login-button:hover {
     background-color: #90c1b0;
-   
+
 }
 
 .arrow {
     content: '\2192';
-  
+
     font-size: 24px;
-  
+
     margin-left: 5px;
-    
+
 }
+
 .popup {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff; 
+    background-color: #fff;
     padding: 40px;
-    border-radius: 20px; 
+    border-radius: 20px;
     z-index: 9999;
-    max-width: 800px; 
-    border: 4px solid #333; 
+    max-width: 800px;
+    border: 4px solid #333;
 }
 
 
 .popup input {
     display: block;
-    margin: 20px auto; 
+    margin: 20px auto;
     padding: 15px;
-    width: calc(100% - 30px); 
+    width: calc(100% - 30px);
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 18px;
@@ -169,25 +168,26 @@ footer {
 
 .popup button {
     display: block;
-    margin: 20px auto; 
-    padding: 15px 30px; 
-    border-radius: 8px; 
+    margin: 20px auto;
+    padding: 15px 30px;
+    border-radius: 8px;
     cursor: pointer;
-    width: calc(100% - 60px); 
-    font-size: 18px; 
- 
+    width: calc(100% - 60px);
+    font-size: 18px;
+
 }
+
 .close-btn {
     position: absolute;
     top: 0;
     right: 0px;
-    left:120px;
+    left: 120px;
     padding: 0;
     font-size: 5px;
     cursor: pointer;
     background-color: transparent;
     border: none;
-    
+
 }
 
 
@@ -196,10 +196,10 @@ footer {
 }
 
 .popup h1 {
-font-size: 36px;
-margin-bottom: 20px;
+    font-size: 36px;
+    margin-bottom: 20px;
 }
 
 .popup p {
-font-size: 18px;
+    font-size: 18px;
 }

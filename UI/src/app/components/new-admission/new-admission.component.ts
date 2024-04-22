@@ -42,7 +42,7 @@ export class NewAdmissionComponent implements OnInit {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
   openSnackBar(message: string, action: string) {
-    console.log("Poruka bi trebala bit ispisana");
+   
     this._snackBar.open(message, action, {
       duration: 2000, 
     });
@@ -59,7 +59,7 @@ export class NewAdmissionComponent implements OnInit {
     const hitniPrijemControl = this.myForm.get('hitniPrijem');
 
     if (datumIVrijemePrijemaControl && pacijentIdControl && nadlezniLjekarIdControl && hitniPrijemControl) {
-        // Provjera vrijednosti hitniPrijem
+      
         const hitniPrijemValue = hitniPrijemControl.value === true ? true : false;
 
         const saljemo = {

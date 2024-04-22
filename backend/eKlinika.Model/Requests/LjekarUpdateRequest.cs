@@ -10,7 +10,6 @@ namespace eKlinika.Model.Requests
     {
       
         public string Ime { get; set; }
-
         public string Prezime { get; set; }
         public TitulaLjekara Titula { get; set; }
         public string Sifra { get; set; }
